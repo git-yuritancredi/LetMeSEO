@@ -1,0 +1,82 @@
+*:focus{
+    outline: none!important;
+    box-shadow: none!important;
+}
+html,
+body {
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #f8f8f8;
+}
+img {
+    -webkit-user-drag: none;
+}
+#dark-mode{
+    background-color: rgba(0, 0, 0, 0.87);
+}
+#main-dom{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.container{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.heading{
+    padding: 22px;
+    margin-bottom: 20px;
+    background-color: #D3D0CB;
+}
+#dark-mode .heading{
+    background-color: rgba(0, 0, 0, 0.08);
+}
+#logo{
+    width: 100%;
+    max-width: 150px;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+.full-height{
+    height: 100%;
+}
+.sidebar{
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+#dark-mode .sidebar{
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+.menu-grid{
+    height: calc(100% - 250px);
+}
+.bottom-picker{
+    align-self: baseline;
+    text-align: center;
+    width: 100%;
+}
+.danger-btn.MuiButton-contained{
+    background-color: #d24b4b!important;
+}
+.danger-btn.MuiButton-contained:hover{
+    background-color: #a53a3a!important;
+}
+.danger-btn.MuiButton-contained .MuiButton-label{
+    color: #FFFFFF!important;
+}
+.danger-btn.MuiButton-outlined{
+    border-color: #d24b4b;
+}
+.danger-btn.MuiButton-outlined .MuiButton-label{
+    color: #d24b4b;
+}
+.danger-btn.MuiButton-outlined:hover{
+    background-color: rgba(165, 58, 58, 0.1);
+}
+.danger-btn.MuiButton-outlined .MuiButton-label{
+    color: #d24b4b;
+}

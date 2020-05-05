@@ -1,0 +1,35 @@
+{
+  "name": "letmeseo",
+  "version": "1.0.0",
+  "description": "Analyze site SEO",
+  "main": "App.js",
+  "scripts": {
+    "start": "gulp start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/git-yuritancredi/LetMeSEO.git"
+  },
+  "author": "Yuri Tancredi",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/git-yuritancredi/LetMeSEO/issues"
+  },
+  "homepage": "https://github.com/git-yuritancredi/LetMeSEO#readme",
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "electron": "^8.2.5",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat": "^2.6.1"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.9.12",
+    "@material-ui/icons": "^4.9.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
