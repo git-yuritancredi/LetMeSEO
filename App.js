@@ -1,19 +1,39 @@
 class LetMeSeo {
     constructor() {
-        const { electron, app, BrowserWindow, ipcMain, systemPreferences } = require('electron');
+        const { electron, app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
+        const connector                     = require('lokijs');
+        this.path                           = require('path');
         this.electron                       = electron;
         this.app                            = app;
         this.windows                        = BrowserWindow;
         this.app.allowRendererProcessReuse  = true;
         this.ipcMain                        = ipcMain;
-        this.systemPreferences              = systemPreferences;
+        this.nativeTheme                    = nativeTheme;
+        this.fetchUrl                       = require('fetch').fetchUrl;
+        this.htmlParser                     = require('node-html-parser');
+        this.db                             = new connector(this.app.getAppPath() + this.path.sep + 'letmeseo.db', {
+            autoload: true,
+            autoloadCallback: this.initDb.bind(this),
+        });
     }
 
     run(){
         this.app.on('ready', () => {
             this.showMainWindow();
-            this.complieIpc();
+            this.compileEvents();
         });
+    }
+
+    initDb(){
+        let configCollection = this.db.getCollection('config');
+        if(configCollection === null){
+            configCollection = this.db.addCollection('config');
+            configCollection.insert({
+                key:    'darkMode',
+                value:  this.nativeTheme.shouldUseDarkColors
+            });
+            this.db.saveDatabase();
+        }
     }
 
     showMainWindow(){
@@ -41,7 +61,7 @@ class LetMeSeo {
         });
     }
 
-    complieIpc(){
+    compileEvents(){
         this.ipcMain.on('quit-app', () => {
            this.app.quit();
         });
@@ -58,7 +78,58 @@ class LetMeSeo {
         });
 
         this.ipcMain.on('system-mode', (request) => {
-            request.returnValue = this.systemPreferences.isDarkMode();
+            let configCollection    = this.db.getCollection('config');
+            let darkMode            = configCollection.findOne({key: 'darkMode'});
+            if(darkMode instanceof Object) {
+                request.returnValue = darkMode.value;
+            }
+            request.returnValue = false;
+        });
+
+        this.ipcMain.on('save-config', (request, configs) => {
+            if(configs instanceof  Object){
+                let collection = this.db.getCollection('config');
+                configs.map((update) => {
+                    try{
+                        collection.findAndUpdate({key: update.key}, (objt) => {
+                            objt.value = update.value;
+                            return objt;
+                        });
+                    }catch (e) {
+                        request.reply('save-done', false);
+                    }
+                });
+                try{
+                    this.db.saveDatabase();
+                    request.reply('save-done', true);
+                }catch (e) {
+                    request.reply('save-done', false);
+                }
+            }
+        });
+
+        this.ipcMain.on('start-analyze', (request, url) => {
+            this.fetchUrl(url, {rejectUnauthorized: false}, (error, meta, body) => {
+                if (!error) {
+                    if (meta.status == 200) {
+                        let parsed = this.htmlParser.parse(body, {
+                            lowerCaseTagName: false,
+                            script: true,
+                            style: true,
+                            pre: true,
+                            comment: false
+                        });
+                        request.reply('analyze-done', parsed);
+                    }
+                }else{
+                    request.reply('analyze-error');
+                }
+
+            });
+        });
+
+        this.app.on('will-quit', () => {
+            this.db.saveDatabase();
         });
     }
 }

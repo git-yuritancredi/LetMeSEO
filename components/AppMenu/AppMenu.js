@@ -49,7 +49,7 @@ export default class AppMenu extends React.Component
                         </List>
                     </Grid>
                     <Grid item className="bottom-picker">
-                        <Chip onClick={this.openGitHubPage} avatar={<Avatar src="../assets/images/avatar.jpg" />} label="@git-yuritancredi" />
+                        <Chip onClick={this.openGitHubPage} avatar={<Avatar src="assets/images/avatar.jpg" />} label="@git-yuritancredi" />
                     </Grid>
                 </Grid>
             </>

@@ -1,12 +1,14 @@
 import React, {useMemo} from 'react';
-import { Grid, Box, ThemeProvider, createMuiTheme } from "@material-ui/core";
+import { Grid, Snackbar, ThemeProvider, createMuiTheme } from "@material-ui/core";
+import { Alert } from '@material-ui/lab';
+import electron from 'electron';
+
 import Analyze from './../Analyze/Analyze';
 import UserToolbar from "../UserToolbar/UserToolbar";
 import AppMenu from "../AppMenu/AppMenu";
 import About from "../About/About";
 import History from "../History/History";
 import Settings from "../Settings/Settings";
-import electron from 'electron';
 
 export default class Main extends React.Component
 {
@@ -21,6 +23,10 @@ export default class Main extends React.Component
             selectedSection: 'analyze',
             darkMode: darkMode,
             logo: darkMode ? this.darkLogo : this.defaultLogo,
+            showSuccess: false,
+            successMessage: null,
+            showError: false,
+            errorMessage: null
         };
 
         this.defaultTheme = createMuiTheme({
@@ -34,7 +40,13 @@ export default class Main extends React.Component
                 MuiFormControlLabel: {
                     label: {
                         marginLeft: 10,
+                        fontSize: 14
                     },
+                },
+                MuiSwitch: {
+                    root: {
+                        marginLeft: 10,
+                    }
                 },
                 MuiListItem: {
                     root: {
@@ -69,10 +81,16 @@ export default class Main extends React.Component
                         color: "#FFFFFF",
                     }
                 },
+                MuiSwitch: {
+                    root: {
+                        marginLeft: 10,
+                    }
+                },
                 MuiFormControlLabel: {
                     label: {
-                        color: '#FFFFFF',
+                        color: '#ffffffb3',
                         marginLeft: 10,
+                        fontSize: 14
                     }
                 },
                 MuiListItemText: {
@@ -82,6 +100,20 @@ export default class Main extends React.Component
                 }
             },
         });
+
+        electron.ipcRenderer.on('save-done', (event, value) => {
+            if(value){
+                this.setState({
+                    showSuccess: true,
+                    successMessage: "Configuration saved."
+                });
+            }else{
+                this.setState({
+                    showError: true,
+                    errorMessage: "Unable to save configuration."
+                });
+            }
+        });
     }
 
     themeModeHandler(mode){
@@ -89,6 +121,15 @@ export default class Main extends React.Component
             darkMode: mode,
             logo: mode ? this.darkLogo : this.defaultLogo
         });
+    }
+
+    resetAlert(){
+        this.setState({
+            showError: false,
+            errorMessage: null,
+            showSuccess: false,
+            successMessage: null
+        })
     }
 
     render() {
@@ -108,6 +149,16 @@ export default class Main extends React.Component
                         }
                     </Grid>
                 </Grid>
+                <Snackbar open={this.state.showSuccess} autoHideDuration={5000} anchorOrigin={{vertical: 'bottom', horizontal: 'right'}} onClose={this.resetAlert.bind(this)}>
+                    <Alert elevation={1} severity="success">
+                        {this.state.successMessage}
+                    </Alert>
+                </Snackbar>
+                <Snackbar open={this.state.showError} autoHideDuration={5000} anchorOrigin={{vertical: 'bottom', horizontal: 'right'}} onClose={this.resetAlert.bind(this)}>
+                    <Alert elevation={1} severity="error">
+                        {this.state.errorMessage}
+                    </Alert>
+                </Snackbar>
             </ThemeProvider>
         );
     }
