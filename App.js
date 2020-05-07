@@ -32,6 +32,10 @@ class LetMeSeo {
                 key:    'darkMode',
                 value:  this.nativeTheme.shouldUseDarkColors
             });
+            configCollection.insert({
+                key:    'saveHistory',
+                value:  true
+            });
             this.db.saveDatabase();
         }
     }
@@ -112,14 +116,17 @@ class LetMeSeo {
             this.fetchUrl(url, {rejectUnauthorized: false}, (error, meta, body) => {
                 if (!error) {
                     if (meta.status == 200) {
-                        let parsed = this.htmlParser.parse(body, {
+                        let parser = this.htmlParser.parse(body, {
                             lowerCaseTagName: false,
                             script: true,
                             style: true,
                             pre: true,
                             comment: false
                         });
-                        request.reply('analyze-done', parsed);
+
+                        let analyzed = this.startAnalysis(parser);
+
+                        request.reply('analyze-done', analyzed);
                     }
                 }else{
                     request.reply('analyze-error');
@@ -131,6 +138,10 @@ class LetMeSeo {
         this.app.on('will-quit', () => {
             this.db.saveDatabase();
         });
+    }
+
+    startAnalysis(parser){
+        return {};
     }
 }
 let app = new LetMeSeo();

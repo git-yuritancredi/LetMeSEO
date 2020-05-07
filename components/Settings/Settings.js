@@ -7,7 +7,8 @@ export default class Settings extends React.Component
     constructor(props) {
         super(props);
         this.state = {
-            darkMode: this.props.darkModeEnabled
+            darkMode: this.props.darkModeEnabled,
+            saveHistory: this.props.saveHistory
         }
     }
 
@@ -18,11 +19,23 @@ export default class Settings extends React.Component
         });
     }
 
+    historyHandler(e){
+        this.setState({
+            saveHistory: e.target.checked
+        });
+    }
+
     saveHandler(){
-        electron.ipcRenderer.send('save-config', [{
-            key: 'darkMode',
-            value: this.state.darkMode
-        }]);
+        electron.ipcRenderer.send('save-config', [
+            {
+                key: 'darkMode',
+                value: this.state.darkMode
+            },
+            {
+                key: 'saveHistory',
+                value: this.state.saveHistory
+            }
+        ]);
     }
 
     render() {
@@ -41,37 +54,42 @@ export default class Settings extends React.Component
                 </Box>
                 <Box className="container">
                     <Box className="form-container">
-                        <Typography variant="subtitle2" color="textSecondary">Theme mode</Typography>
-                        <Divider variant="fullWidth" />
-                        <FormGroup row>
-                            <FormControlLabel control={
+                        <Box className="single-setting">
+                            <Typography variant="subtitle2" color="textSecondary">Theme mode</Typography>
+                            <Divider variant="fullWidth" />
+                            <FormGroup row>
+                                <FormControlLabel control={
+                                        <Switch
+                                            checked={this.state.darkMode}
+                                            onChange={this.themeModeHandler.bind(this)}
+                                            color="primary"
+                                            name="themeMode"
+                                            size="small"
+                                        />
+                                    }
+                                    label="Dark mode"
+                                    color="default"
+                                />
+                            </FormGroup>
+                        </Box>
+                        <Box className="single-setting last">
+                            <Typography variant="subtitle2" color="textSecondary">Memorization settings</Typography>
+                            <Divider variant="fullWidth" />
+                            <FormGroup row>
+                                <FormControlLabel control={
                                     <Switch
-                                        checked={this.state.darkMode}
-                                        onChange={this.themeModeHandler.bind(this)}
+                                        checked={this.state.saveHistory}
+                                        onChange={this.historyHandler.bind(this)}
                                         color="primary"
-                                        name="themeMode"
+                                        name="saveHistory"
                                         size="small"
                                     />
                                 }
-                                label="Dark mode"
+                                label="Save analyzed sites"
                                 color="default"
-                            />
-                        </FormGroup>
-                        <Typography variant="subtitle2" color="textSecondary">Memorization settings</Typography>
-                        <Divider variant="fullWidth" />
-                        <FormGroup row>
-                            <FormControlLabel control={
-                                <Switch
-                                    checked={true}
-                                    color="primary"
-                                    name="saveHistory"
-                                    size="small"
                                 />
-                            }
-                            label="Save analyzed sites"
-                            color="default"
-                            />
-                        </FormGroup>
+                            </FormGroup>
+                        </Box>
                     </Box>
                 </Box>
             </>

@@ -5,7 +5,6 @@
 html,
 body {
     -webkit-user-select: none;
-    -webkit-app-region: drag;
     padding: 0;
     margin: 0;
     height: 100vh;
@@ -44,6 +43,9 @@ img {
 }
 .full-height{
     height: 100%;
+}
+.toolbar{
+    -webkit-app-region: drag;
 }
 .sidebar{
     border-right: 1px solid rgba(0, 0, 0, 0.12);
@@ -85,4 +87,94 @@ img {
 }
 .form-container .MuiTypography-subtitle2 + .MuiDivider-root{
     margin-bottom: 10px;
+}
+.form-container .single-setting:not(.last){
+    margin-bottom: 30px;
+}
+.analysis-conainer{
+    margin-top: 20px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
+}
+.analysis-conainer .analysis-view{
+    overflow-y: scroll;
+    height: calc(100vh - 200px);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: rgba(0, 0, 0, .08);
+}
+.analysis-conainer .analysis-view .stiker{
+    content: "";
+    display: block;
+    position:-webkit-sticky;
+    position:sticky;
+    left: 0;
+    top: -20px;
+    width: 60px;
+    height: calc(100% + 32px);
+    background-color: #424C55;
+    margin-top: calc(200px - 100vh);
+}
+.analysis-conainer .analysis-view.no-scroll{
+    overflow-y: hidden;
+}
+#dark-mode .analysis-conainer .analysis-view{
+    background-color: rgba(255, 255, 255, 0.16);
+}
+.analysis-conainer .analysis-view{
+    counter-reset: codeline;
+}
+.analysis-conainer .analysis-view pre{
+    padding-left: 70px;
+}
+.analysis-conainer .analysis-view .code-line{
+    counter-increment: codeline;
+    z-index: 0;
+}
+.analysis-conainer .analysis-view .code-line:before{
+    content: counter(codeline);
+    position: absolute;
+    z-index: 9;
+    color: #FFFFFF;
+    width: 60px;
+    text-align: center;
+    line-height: 15px;
+    font-size: 10px;
+    font-family: sans-serif;
+}
+.analysis-conainer .analysis-view .code-line:not(:last-child){
+    margin-bottom: 15px;
+}
+.analysis-conainer .analysis-view .code-line:hover:before{
+    background-color: rgb(51, 133, 118);
+}
+.about-section .abount-content{
+    text-align: center;
+}
+.about-section .abount-content .MuiAvatar-root{
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+.about-section .abount-content .MuiTypography-root{
+    margin-top: 20px;
+}
+.about-section .abount-content .MuiChip-root{
+    margin-top: 20px;
+}
+*::-webkit-scrollbar {
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+*::-webkit-scrollbar-thumb {
+    background: rgba(8, 204, 184, 0.2);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(8, 204, 184, 0.5);
 }
