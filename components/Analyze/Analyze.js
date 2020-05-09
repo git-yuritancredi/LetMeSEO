@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Box, Typography, Grid, TextField} from '@material-ui/core';
 import Placeholder from './Placeholder';
+import Analysis from "./Analysis";
 import electron from "electron";
 
 export default class Analyze extends React.Component
@@ -8,33 +9,27 @@ export default class Analyze extends React.Component
     constructor(props) {
         super(props);
         this.state = {
-            analyzeString: null,
+            analyzeUrl: null,
             validUrl: true,
-            analysisString: null,
+            analysis: null,
             analysisPoints: null,
-            startAnimation: false
+            startAnimation: false,
         };
 
         electron.ipcRenderer.on('analyze-done', (event, parsedData) => {
-            console.log(parsedData);
             this.setState({
-                analysisString: parsedData.asString,
-                analysisPoints: parsedData.analyzed,
-                startAnimation: false
-            });
+                analysis: parsedData
+            })
         });
     }
 
     analyzeHandler(){
-        this.setState({
-            startAnimation: "wave"
-        });
-        electron.ipcRenderer.send('start-analyze', this.state.analyzeString);
+        electron.ipcRenderer.send('start-analyze', this.state.analyzeUrl);
     }
 
     inputHandler(e){
         this.setState({
-            analyzeString: e.target.value,
+            analyzeUrl: e.target.value,
             validUrl: this.isValidURL(e.target.value)
         })
     }
@@ -69,15 +64,18 @@ export default class Analyze extends React.Component
                     </Grid>
                 </Grid>
                 <Grid className="analysis-conainer" container>
-                    <Grid className="analysis-point" xs={4} item>
+                    <Grid className="analysis-point" xs={12} item>
                         <Box className="container">
+                            {
+                                this.state.startAnimation ?
+                                    <Placeholder /> :
+                                (
+                                    this.state.analysis ?
+                                    <Analysis data={this.state.analysis} /> :
+                                    ''
+                                )
+                            }
                         </Box>
-                    </Grid>
-                    <Grid className={this.state.analysisString ? 'analysis-view' : 'analysis-view no-scroll'} xs={8} item>
-                        <Box className="stiker"></Box>
-                        {
-                            this.state.analysisString ? <pre>{this.state.analysisString}</pre> : <Placeholder animation={this.state.startAnimation} />
-                        }
                     </Grid>
                 </Grid>
             </Box>

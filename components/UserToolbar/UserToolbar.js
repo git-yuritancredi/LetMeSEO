@@ -3,7 +3,7 @@ import { AppBar, Toolbar, IconButton, Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import MinimizeIcon from '@material-ui/icons/Minimize';
-import electron from 'electron';
+    import electron from 'electron';
 
 export default class UserToolbar extends React.Component
 {

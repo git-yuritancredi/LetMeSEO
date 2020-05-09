@@ -162,6 +162,15 @@ img {
 .about-section .abount-content .MuiChip-root{
     margin-top: 20px;
 }
+.skeleton-container .MuiSkeleton-root.first-line{
+    margin-bottom: 10px;
+}
+.skeleton-container .MuiDivider-root{
+    margin-bottom: 20px;
+}
+.skeleton-container .MuiSkeleton-root:not(.first-line){
+    margin-bottom: 10px;
+}
 *::-webkit-scrollbar {
     width: 10px;
 }

@@ -8,8 +8,18 @@ export default class Settings extends React.Component
         super(props);
         this.state = {
             darkMode: this.props.darkModeEnabled,
-            saveHistory: this.props.saveHistory
+            saveHistory: this.props.saveHistory ? this.props.saveHistory : true,
         }
+
+        let configs = electron.ipcRenderer.sendSync('get-config');
+        if(configs.length > 0){
+            console.log(configs);
+            configs.map((config) => {
+                console.log(config);
+                this.state[config.key] = config.value;
+            });
+        }
+
     }
 
     themeModeHandler(e) {
@@ -77,16 +87,16 @@ export default class Settings extends React.Component
                             <Divider variant="fullWidth" />
                             <FormGroup row>
                                 <FormControlLabel control={
-                                    <Switch
-                                        checked={this.state.saveHistory}
-                                        onChange={this.historyHandler.bind(this)}
-                                        color="primary"
-                                        name="saveHistory"
-                                        size="small"
-                                    />
-                                }
-                                label="Save analyzed sites"
-                                color="default"
+                                        <Switch
+                                            checked={this.state.saveHistory}
+                                            onChange={this.historyHandler.bind(this)}
+                                            color="primary"
+                                            name="saveHistory"
+                                            size="small"
+                                        />
+                                    }
+                                    label="Save analyzed sites"
+                                    color="default"
                                 />
                             </FormGroup>
                         </Box>

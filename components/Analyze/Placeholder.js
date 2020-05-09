@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from "@material-ui/core";
+import { Box, Divider } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 
 export default class Placeholder extends React.Component
@@ -8,8 +8,10 @@ export default class Placeholder extends React.Component
         super(props);
 
         let items = [];
-        for(let i = 40; i > 0; i--){
-            items.push(<Skeleton className="code-line" animation={props.animation} key={i} variant="rect" width={this.getRandom()} height={15} />);
+        items.push(<Skeleton animation="wave" key="0" className="first-line" variant="rect" width={200} height={35} />)
+        items.push(<Divider variant="fullWidth" />);
+        for(let i = 10; i > 0; i--){
+            items.push(<Skeleton animation="wave" key={i} variant="rect" width={this.getRandom()} height={15} />);
         }
 
         this.state = {

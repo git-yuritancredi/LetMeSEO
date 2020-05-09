@@ -90,6 +90,11 @@ class LetMeSeo {
             request.returnValue = false;
         });
 
+        this.ipcMain.on('get-config', (request) => {
+            let configs = this.db.getCollection('config');
+            request.returnValue = configs.chain().data();
+        });
+
         this.ipcMain.on('save-config', (request, configs) => {
             if(configs instanceof  Object){
                 let collection = this.db.getCollection('config');
@@ -118,8 +123,8 @@ class LetMeSeo {
                     if (meta.status == 200) {
                         let parser = this.htmlParser.parse(body, {
                             lowerCaseTagName: false,
-                            script: true,
-                            style: true,
+                            script: false,
+                            style: false,
                             pre: true,
                             comment: false
                         });
@@ -141,7 +146,157 @@ class LetMeSeo {
     }
 
     startAnalysis(parser){
-        return {};
+        let analysis = {
+            meta: {
+                title: false,
+                description: false,
+                keywords: false
+            },
+            social: {
+                facebook: {
+                    app_id: false,
+                    type: false,
+                    locale: false,
+                    site_name: false
+                },
+                twitter: {
+                    card: false,
+                    site: false,
+                    creator: false,
+                },
+                url: false,
+                title: false,
+                description: false,
+                image: false
+            },
+            robots: false,
+            canonical: false,
+            mobile: false,
+            imageNoAlt: [],
+            titles: {
+                h1: 0,
+                h2: 0,
+                h3: 0,
+                h4: 0
+            }
+        };
+
+        //Check title
+        let title = parser.querySelector('title');
+        if(title){
+            if(title.childNodes){
+                analysis.meta.title = title.childNodes[0].rawText;
+            }
+        }
+
+        //Check canonical
+        let links = parser.querySelectorAll('link');
+        links.map((link) => {
+            if(link.attributes.rel.toLowerCase() === 'canonical'){
+                analysis.canonical = true;
+            }
+        });
+
+        //Check metas
+        let metas = parser.querySelectorAll('meta');
+        metas.map((meta) => {
+            if(meta.attributes) {
+                if(meta.attributes.name) {
+                    //Robots
+                    if (meta.attributes.name.toLowerCase() === 'robots') {
+                        if (
+                            meta.attributes.content.toLowerCase().indexOf('index') !== -1 &&
+                            meta.attributes.content.toLowerCase().indexOf('follow') !== -1
+                        ) {
+                            analysis.robots = true;
+                        }
+                    }
+
+                    //ViewPort
+                    if (meta.attributes.name.toLowerCase() === 'viewport') {
+                        if (
+                            meta.attributes.content.toLowerCase().indexOf('width=device-width') !== -1 &&
+                            meta.attributes.content.toLowerCase().indexOf('maximum-scale=1') !== -1
+                        ) {
+                            analysis.mobile = true;
+                        }
+                    }
+
+                    //Description
+                    if (meta.attributes.name.toLowerCase() === 'description') {
+                        analysis.meta.description = meta.attributes.content;
+                    }
+
+                    //Keywords
+                    if (meta.attributes.name.toLowerCase() === 'keywords') {
+                        analysis.meta.keywords = meta.attributes.content;
+                    }
+                }else if(meta.attributes.property){
+                    //Facebook
+                    if (meta.attributes.property.toLowerCase() === 'og:locale') {
+                        analysis.social.facebook.locale = true;
+                    }
+                    if (meta.attributes.property.toLowerCase() === 'og:type') {
+                        analysis.social.facebook.type = true;
+                    }
+                    if (meta.attributes.property.toLowerCase() === 'og:site_name') {
+                        analysis.social.facebook.site_name = true;
+                    }
+
+                    //Twitter
+                    if (meta.attributes.property.toLowerCase() === 'twitter:card') {
+                        analysis.social.twitter.card = true;
+                    }
+                    if (meta.attributes.property.toLowerCase() === 'twitter:site') {
+                        analysis.social.twitter.site = true;
+                    }
+                    if (meta.attributes.property.toLowerCase() === 'twitter:creator') {
+                        analysis.social.twitter.creator = true;
+                    }
+
+                    //All social
+                    if (meta.attributes.property.toLowerCase() === 'og:title') {
+                        analysis.social.title = true;
+                    }
+                    if (meta.attributes.property.toLowerCase() === 'og:description') {
+                        analysis.social.description = true;
+                    }
+                    if (meta.attributes.property.toLowerCase() === 'og:url') {
+                        analysis.social.url = true;
+                    }
+                    if (meta.attributes.property.toLowerCase() === 'og:image') {
+                        analysis.social.image = true;
+                    }
+                }
+            }
+        });
+
+        //Check h tags
+        let h1 = parser.querySelectorAll('h1');
+        analysis.titles.h1 = h1.length;
+        let h2 = parser.querySelectorAll('h2');
+        analysis.titles.h2 = h2.length;
+        let h3 = parser.querySelectorAll('h3');
+        analysis.titles.h3 = h3.length;
+        let h4 = parser.querySelectorAll('h4');
+        analysis.titles.h4 = h4.length;
+
+        //No alt images
+        let images = parser.querySelectorAll('img');
+        images.map((image) => {
+            if(image.attributes) {
+                if(image.attributes.alt) {
+                    if (image.attributes.alt.length === 0) {
+                        analysis.imageNoAlt.push(image.toString());
+                    }
+                }else{
+                    analysis.imageNoAlt.push(image.toString());
+                }
+            }else{
+                analysis.imageNoAlt.push(image.toString());
+            }
+        });
+        return analysis;
     }
 }
 let app = new LetMeSeo();
