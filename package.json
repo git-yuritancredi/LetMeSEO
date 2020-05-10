@@ -31,6 +31,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.52",
     "fetch": "^1.1.0",
+    "he": "^1.2.0",
     "lokijs": "^1.5.8",
     "node-html-parser": "^1.2.16",
     "react": "^16.13.1",

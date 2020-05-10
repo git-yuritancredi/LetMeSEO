@@ -1,46 +1,47 @@
 class LetMeSeo {
     constructor() {
-        const { electron, app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
-        const connector                     = require('lokijs');
-        this.path                           = require('path');
-        this.electron                       = electron;
-        this.app                            = app;
-        this.windows                        = BrowserWindow;
-        this.app.allowRendererProcessReuse  = true;
-        this.ipcMain                        = ipcMain;
-        this.nativeTheme                    = nativeTheme;
-        this.fetchUrl                       = require('fetch').fetchUrl;
-        this.htmlParser                     = require('node-html-parser');
-        this.db                             = new connector(this.app.getAppPath() + this.path.sep + 'letmeseo.db', {
+        const {electron, app, BrowserWindow, ipcMain, nativeTheme} = require('electron');
+        const connector = require('lokijs');
+        this.path = require('path');
+        this.he = require('he');
+        this.electron = electron;
+        this.app = app;
+        this.windows = BrowserWindow;
+        this.app.allowRendererProcessReuse = true;
+        this.ipcMain = ipcMain;
+        this.nativeTheme = nativeTheme;
+        this.fetchUrl = require('fetch').fetchUrl;
+        this.htmlParser = require('node-html-parser');
+        this.db = new connector(this.app.getAppPath() + this.path.sep + 'letmeseo.db', {
             autoload: true,
             autoloadCallback: this.initDb.bind(this),
         });
     }
 
-    run(){
+    run() {
         this.app.on('ready', () => {
             this.showMainWindow();
             this.compileEvents();
         });
     }
 
-    initDb(){
+    initDb() {
         let configCollection = this.db.getCollection('config');
-        if(configCollection === null){
+        if (configCollection === null) {
             configCollection = this.db.addCollection('config');
             configCollection.insert({
-                key:    'darkMode',
-                value:  this.nativeTheme.shouldUseDarkColors
+                key: 'darkMode',
+                value: this.nativeTheme.shouldUseDarkColors
             });
             configCollection.insert({
-                key:    'saveHistory',
-                value:  true
+                key: 'saveHistory',
+                value: true
             });
             this.db.saveDatabase();
         }
     }
 
-    showMainWindow(){
+    showMainWindow() {
         this.mainWindow = new this.windows({
             width: 1200,
             height: 900,
@@ -65,16 +66,16 @@ class LetMeSeo {
         });
     }
 
-    compileEvents(){
+    compileEvents() {
         this.ipcMain.on('quit-app', () => {
-           this.app.quit();
+            this.app.quit();
         });
         this.ipcMain.on('resize-app', () => {
-           if(this.mainWindow.isMaximized()){
-               this.mainWindow.unmaximize();
-           }else{
-               this.mainWindow.maximize();
-           }
+            if (this.mainWindow.isMaximized()) {
+                this.mainWindow.unmaximize();
+            } else {
+                this.mainWindow.maximize();
+            }
         });
 
         this.ipcMain.on('minimize-app', () => {
@@ -82,9 +83,9 @@ class LetMeSeo {
         });
 
         this.ipcMain.on('system-mode', (request) => {
-            let configCollection    = this.db.getCollection('config');
-            let darkMode            = configCollection.findOne({key: 'darkMode'});
-            if(darkMode instanceof Object) {
+            let configCollection = this.db.getCollection('config');
+            let darkMode = configCollection.findOne({key: 'darkMode'});
+            if (darkMode instanceof Object) {
                 request.returnValue = darkMode.value;
             }
             request.returnValue = false;
@@ -95,23 +96,32 @@ class LetMeSeo {
             request.returnValue = configs.chain().data();
         });
 
+        this.ipcMain.on('get-history', (request) => {
+            let history = this.db.addCollection('history');
+            let data    = [];
+            if(history){
+                data = history.chain().data();
+            }
+            request.reply('history-update', data);
+        });
+
         this.ipcMain.on('save-config', (request, configs) => {
-            if(configs instanceof  Object){
+            if (configs instanceof Object) {
                 let collection = this.db.getCollection('config');
                 configs.map((update) => {
-                    try{
+                    try {
                         collection.findAndUpdate({key: update.key}, (objt) => {
                             objt.value = update.value;
                             return objt;
                         });
-                    }catch (e) {
+                    } catch (e) {
                         request.reply('save-done', false);
                     }
                 });
-                try{
+                try {
                     this.db.saveDatabase();
                     request.reply('save-done', true);
-                }catch (e) {
+                } catch (e) {
                     request.reply('save-done', false);
                 }
             }
@@ -120,7 +130,7 @@ class LetMeSeo {
         this.ipcMain.on('start-analyze', (request, url) => {
             this.fetchUrl(url, {rejectUnauthorized: false}, (error, meta, body) => {
                 if (!error) {
-                    if (meta.status == 200) {
+                    if (meta.status === 200) {
                         let parser = this.htmlParser.parse(body, {
                             lowerCaseTagName: false,
                             script: false,
@@ -130,11 +140,34 @@ class LetMeSeo {
                         });
 
                         let analyzed = this.startAnalysis(parser);
+                        let points = this.calculatePoints(analyzed);
 
+                        analyzed.analyzedUrl = url;
+                        analyzed.analysisPoints = points;
+                        let configs = this.db.getCollection('config');
+                        let result = configs.findOne({key: 'saveHistory'});
+                        if (result) {
+                            if (result.value === true) {
+                                let history = this.db.getCollection('history');
+                                if (!history) {
+                                    history = this.db.addCollection('history');
+                                }
+                                let check = history.findOne({analyzedUrl: analyzed.analyzedUrl});
+                                if(check === null){
+                                    history.insert(analyzed);
+                                }else {
+                                    history.findAndUpdate({analyzedUrl: analyzed.analyzedUrl}, (check) => {
+                                        return analyzed;
+                                    });
+                                }
+                                request.reply('history-update', history.chain().data());
+                            }
+                        }
+                        this.db.saveDatabase();
                         request.reply('analyze-done', analyzed);
                     }
-                }else{
-                    request.reply('analyze-error');
+                } else {
+                    request.reply('analyze-error', {message: error});
                 }
 
             });
@@ -145,7 +178,7 @@ class LetMeSeo {
         });
     }
 
-    startAnalysis(parser){
+    startAnalysis(parser) {
         let analysis = {
             meta: {
                 title: false,
@@ -183,55 +216,45 @@ class LetMeSeo {
 
         //Check title
         let title = parser.querySelector('title');
-        if(title){
-            if(title.childNodes){
-                analysis.meta.title = title.childNodes[0].rawText;
+        if (title) {
+            if (title.childNodes && title.childNodes[0].rawText) {
+                analysis.meta.title = this.he.decode(title.childNodes[0].rawText, {strict: false});
             }
         }
 
         //Check canonical
         let links = parser.querySelectorAll('link');
-        links.map((link) => {
-            if(link.attributes.rel.toLowerCase() === 'canonical'){
-                analysis.canonical = true;
+        links.map((link) => {
+            if (link.attributes.rel.toLowerCase() === 'canonical') {
+                analysis.canonical = link.attributes.href;
             }
         });
 
         //Check metas
         let metas = parser.querySelectorAll('meta');
         metas.map((meta) => {
-            if(meta.attributes) {
-                if(meta.attributes.name) {
+            if (meta.attributes) {
+                if (meta.attributes.name) {
                     //Robots
                     if (meta.attributes.name.toLowerCase() === 'robots') {
-                        if (
-                            meta.attributes.content.toLowerCase().indexOf('index') !== -1 &&
-                            meta.attributes.content.toLowerCase().indexOf('follow') !== -1
-                        ) {
-                            analysis.robots = true;
-                        }
+                        analysis.robots = meta.attributes.content.toLowerCase();
                     }
 
                     //ViewPort
                     if (meta.attributes.name.toLowerCase() === 'viewport') {
-                        if (
-                            meta.attributes.content.toLowerCase().indexOf('width=device-width') !== -1 &&
-                            meta.attributes.content.toLowerCase().indexOf('maximum-scale=1') !== -1
-                        ) {
-                            analysis.mobile = true;
-                        }
+                        analysis.mobile = meta.attributes.content.toLowerCase();
                     }
 
                     //Description
-                    if (meta.attributes.name.toLowerCase() === 'description') {
-                        analysis.meta.description = meta.attributes.content;
+                    if (meta.attributes.name.toLowerCase() === 'description' && meta.attributes.content) {
+                        analysis.meta.description = this.he.decode(meta.attributes.content, {strict: false});
                     }
 
                     //Keywords
-                    if (meta.attributes.name.toLowerCase() === 'keywords') {
-                        analysis.meta.keywords = meta.attributes.content;
+                    if (meta.attributes.name.toLowerCase() === 'keywords' && meta.attributes.content) {
+                        analysis.meta.keywords = this.he.decode(meta.attributes.content, {strict: false});
                     }
-                }else if(meta.attributes.property){
+                } else if (meta.attributes.property) {
                     //Facebook
                     if (meta.attributes.property.toLowerCase() === 'og:locale') {
                         analysis.social.facebook.locale = true;
@@ -284,19 +307,58 @@ class LetMeSeo {
         //No alt images
         let images = parser.querySelectorAll('img');
         images.map((image) => {
-            if(image.attributes) {
-                if(image.attributes.alt) {
+            if (image.attributes) {
+                if (image.attributes.alt) {
                     if (image.attributes.alt.length === 0) {
                         analysis.imageNoAlt.push(image.toString());
                     }
-                }else{
+                } else {
                     analysis.imageNoAlt.push(image.toString());
                 }
-            }else{
+            } else {
                 analysis.imageNoAlt.push(image.toString());
             }
         });
         return analysis;
+    }
+
+    calculatePoints(data) {
+        let points = 0.0;
+        if (data.canonical) {
+            points = points + 1.0;
+        }
+        if (data.mobile) {
+            if (data.mobile.indexOf('width=device-width') !== -1 && data.mobile.indexOf('initial-scale=1') !== -1) {
+                points = points + 0.5;
+            }
+        }
+        if(!data.meta.title){
+            points = points - 1.0;
+        }else if(data.meta.title.length <= 60){
+            points = points + 1.0;
+        }
+        if(!data.meta.description){
+            points = points - 1.0;
+        }else if(data.meta.description.length > 120 && data.meta.description.length < 158){
+            points = points + 1.0;
+        }
+        if(data.titles.h1 > 1 || data.titles.h1 === 0){
+            points = points - 0.5;
+        }else if((data.titles.h2 < data.titles.h3) && (data.titles.h3 < data.titles.h4) && (data.titles.h1 === 1)){
+            points = points + 0.5
+        }
+        if(data.imageNoAlt.length === 0){
+            points = points + 0.5
+        }
+        if(
+            data.social.title &&
+            data.social.image &&
+            data.social.url &&
+            data.social.description
+        ){
+            points = points + 0.5;
+        }
+        return points;
     }
 }
 let app = new LetMeSeo();

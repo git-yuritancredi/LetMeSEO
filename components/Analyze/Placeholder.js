@@ -10,8 +10,15 @@ export default class Placeholder extends React.Component
         let items = [];
         items.push(<Skeleton animation="wave" key="0" className="first-line" variant="rect" width={200} height={35} />)
         items.push(<Divider variant="fullWidth" />);
-        for(let i = 10; i > 0; i--){
+        for(let i = 1; i <= 10; i++){
             items.push(<Skeleton animation="wave" key={i} variant="rect" width={this.getRandom()} height={15} />);
+        }
+        items.push(<br key="11"/>);
+        items.push(<br key="12"/>);
+        items.push(<Skeleton animation="wave" key="13" className="first-line" variant="rect" width={200} height={35} />)
+        items.push(<Divider variant="fullWidth" />);
+        for(let j = 0; j < 10; j++){
+            items.push(<Skeleton animation="wave" key={14+j} variant="rect" width={this.getRandom()} height={15} />);
         }
 
         this.state = {

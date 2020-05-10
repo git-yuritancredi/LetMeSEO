@@ -1,5 +1,5 @@
 import React from "react";
-import { List, ListItem, Divider, Chip, Avatar, Grid, ListItemIcon, ListItemText } from "@material-ui/core";
+import { List, ListItem, Divider, Chip, Avatar, Grid, Badge, ListItemIcon, ListItemText } from "@material-ui/core";
 import BarChartIcon from '@material-ui/icons/BarChart';
 import HistoryIcon from '@material-ui/icons/History';
 import TuneIcon from '@material-ui/icons/Tune';
@@ -21,16 +21,21 @@ export default class AppMenu extends React.Component
                         <List component="nav" aria-label="main mailbox folders">
                             <ListItem selected={this.props.selected === 'analyze'} onClick={() => { this.changeSectionHandle('analyze') }} button>
                                 <ListItemIcon>
-                                    <BarChartIcon />
+                                    { this.props.badged === 'analyze' && this.props.selected !== 'analyze' ?
+                                        <Badge color="primary" variant="dot">
+                                            <BarChartIcon/>
+                                        </Badge> :
+                                        <BarChartIcon/>
+                                    }
                                 </ListItemIcon>
-                                <ListItemText primary="Analyze" secondary="Analyze an site" />
+                                <ListItemText primary="Analyze" secondary="Analyze site SEO" />
                             </ListItem>
                             <Divider />
                             <ListItem selected={this.props.selected === 'history'} onClick={() => { this.changeSectionHandle('history') }} button>
                                 <ListItemIcon>
                                     <HistoryIcon />
                                 </ListItemIcon>
-                                <ListItemText primary="History" secondary="You has analyzed 0 sites" />
+                                <ListItemText primary="History" secondary={"You has analyzed " + this.props.historyLength + " sites"} />
                             </ListItem>
                             <Divider />
                             <ListItem selected={this.props.selected === 'settings'} onClick={() => { this.changeSectionHandle('settings') }} button>

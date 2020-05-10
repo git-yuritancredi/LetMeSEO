@@ -21,6 +21,9 @@ export default class Main extends React.Component
 
         this.state = {
             selectedSection: 'analyze',
+            badgedSection: null,
+            keptData: null,
+            historyData: [],
             darkMode: darkMode,
             logo: darkMode ? this.darkLogo : this.defaultLogo,
             showSuccess: false,
@@ -74,6 +77,9 @@ export default class Main extends React.Component
                 primary: {
                     main: '#49BEAA',
                 },
+                secondary: {
+                    main: '#ffd231',
+                }
             },
             overrides: {
                 MuiButton: {
@@ -114,6 +120,21 @@ export default class Main extends React.Component
                 });
             }
         });
+
+        electron.ipcRenderer.on('analyze-error', (event, error) => {
+            this.setState({
+                showError: true,
+                errorMessage: error.message.toString()
+            });
+        });
+
+        electron.ipcRenderer.on('history-update', (event, data) => {
+            this.setState({
+                historyData: data
+            });
+        });
+
+        electron.ipcRenderer.send('get-history');
     }
 
     themeModeHandler(mode){
@@ -132,18 +153,31 @@ export default class Main extends React.Component
         })
     }
 
+    keepDataHandler(section, data){
+        this.setState({
+            badgedSection: section,
+            keptData: data
+        });
+    }
+
     render() {
         return (
             <ThemeProvider theme={this.state.darkMode ? this.darkTheme : this.defaultTheme}>
                 <Grid container className="full-height" id={this.state.darkMode ? 'dark-mode' : 'light-mode'}>
                     <Grid item className="sidebar" xs={3}>
                         <UserToolbar />
-                        <AppMenu selected={this.state.selectedSection} handleChange={this.setCurrentSectionHandle.bind(this)} logo={this.state.logo} />
+                        <AppMenu
+                            selected={this.state.selectedSection}
+                            badged={this.state.badgedSection}
+                            handleChange={this.setCurrentSectionHandle.bind(this)}
+                            historyLength={this.state.historyData.length}
+                            logo={this.state.logo}
+                        />
                     </Grid>
                     <Grid item xs={9}>
                         {
-                            this.state.selectedSection === 'analyze' ? <Analyze /> :
-                            this.state.selectedSection === 'history' ? <History /> :
+                            this.state.selectedSection === 'analyze' ? <Analyze keptData={this.state.keptData} keepDataHandler={this.keepDataHandler.bind(this)} /> :
+                            this.state.selectedSection === 'history' ? <History data={this.state.historyData} /> :
                             this.state.selectedSection === 'settings' ? <Settings darkMode={this.themeModeHandler.bind(this)} darkModeEnabled={this.state.darkMode} /> :
                             this.state.selectedSection === 'about' ? <About /> : ''
                         }

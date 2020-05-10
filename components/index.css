@@ -14,6 +14,9 @@ body {
 img {
     -webkit-user-drag: none;
 }
+.text-right{
+    text-align: right;
+}
 #dark-mode{
     background-color: rgba(0, 0, 0, 0.87);
 }
@@ -170,6 +173,41 @@ img {
 }
 .skeleton-container .MuiSkeleton-root:not(.first-line){
     margin-bottom: 10px;
+}
+.analysis-conainer-inner{
+    overflow-y: scroll;
+    max-height: calc(100vh - 220px);
+    overflow-x: hidden;
+    padding-right: 10px;
+}
+.analysis-conainer-inner .title-tag{
+    position: relative;
+    margin-bottom: 5px;
+}
+.analysis-conainer-inner .title-tag .MuiSvgIcon-root{
+    margin-bottom: -4px;
+}
+.analysis-conainer-inner .title-tag .MuiBadge-root{
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+.analysis-conainer-inner .MuiDivider-root{
+    margin-bottom: 10px;
+}
+.analysis-conainer-inner .content-tag{
+    background-color: #3c3c3c;
+    padding: 20px;
+    line-height: 20px;
+    margin-bottom: 10px;
+    -webkit-user-select: all;
+}
+.analysis-conainer-inner .content-tag.no-wrapping{
+    overflow: hidden;
+    white-space: nowrap;
+}
+.analysis-conainer-inner .tag-analysis-container{
+    margin-bottom: 35px;
 }
 *::-webkit-scrollbar {
     width: 10px;

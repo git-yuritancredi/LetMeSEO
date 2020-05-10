@@ -9,29 +9,35 @@ export default class Settings extends React.Component
         this.state = {
             darkMode: this.props.darkModeEnabled,
             saveHistory: this.props.saveHistory ? this.props.saveHistory : true,
+            hasChanges: false
         }
 
         let configs = electron.ipcRenderer.sendSync('get-config');
         if(configs.length > 0){
-            console.log(configs);
             configs.map((config) => {
-                console.log(config);
                 this.state[config.key] = config.value;
             });
         }
+    }
 
+    componentWillUnmount(){
+        if(this.state.hasChanges){
+            this.saveHandler();
+        }
     }
 
     themeModeHandler(e) {
         this.props.darkMode(e.target.checked);
         this.setState({
-            darkMode: e.target.checked
+            darkMode: e.target.checked,
+            hasChanges: true
         });
     }
 
     historyHandler(e){
         this.setState({
-            saveHistory: e.target.checked
+            saveHistory: e.target.checked,
+            hasChanges: true
         });
     }
 
@@ -46,6 +52,9 @@ export default class Settings extends React.Component
                 value: this.state.saveHistory
             }
         ]);
+        this.setState({
+            hasChanges: false
+        });
     }
 
     render() {

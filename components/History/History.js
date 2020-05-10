@@ -1,5 +1,24 @@
 import React from "react";
-import {Box, Button, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions} from "@material-ui/core";
+import {
+    Box,
+    Button,
+    Grid,
+    Typography,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TablePagination,
+    Checkbox,
+    TableHead,
+    TableRow,
+    TableSortLabel,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions
+} from "@material-ui/core";
 
 export default class History extends React.Component
 {
@@ -7,7 +26,13 @@ export default class History extends React.Component
         super(props);
         this.state = {
             analyzedSites: 0,
-            confirmOpened: false
+            confirmOpened: false,
+            data: props.data,
+            headCells: [
+                { id: 'site', numeric: false, disablePadding: true, label: 'Site URL' },
+                { id: 'point', numeric: true, disablePadding: false, label: 'LetMeScore' },
+                { id: 'actions', numeric: false, disablePadding: false, label: 'Actions' },
+            ]
         };
     }
 
@@ -25,7 +50,7 @@ export default class History extends React.Component
 
     render() {
         return (
-            <>
+            <Box className="content-container">
                 <Box className="heading">
                     <Grid alignItems="center" container>
                         <Grid item xs={9}>
@@ -37,6 +62,28 @@ export default class History extends React.Component
                         </Grid>
                     </Grid>
                 </Box>
+                <Grid className="container" container>
+                    <Grid item xs={12}>
+                        <TableHead className="data-table">
+                            <TableRow>
+                                <TableCell padding="checkbox">
+                                    <Checkbox inputProps={{ 'aria-label': 'Select all' }} />
+                                </TableCell>
+                                {this.state.headCells.map((headCell) => (
+                                    <TableCell
+                                        key={headCell.id}
+                                        align='left'
+                                        padding='default'
+                                    >
+                                        <TableSortLabel>
+                                            {headCell.label}
+                                        </TableSortLabel>
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                    </Grid>
+                </Grid>
                 <Dialog
                     open={this.state.confirmOpened}
                     aria-labelledby="alert-dialog-title"
@@ -57,7 +104,7 @@ export default class History extends React.Component
                         </Button>
                     </DialogActions>
                 </Dialog>
-            </>
+            </Box>
         );
     }
 }
