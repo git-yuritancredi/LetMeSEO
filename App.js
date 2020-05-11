@@ -127,6 +127,20 @@ class LetMeSeo {
             }
         });
 
+        this.ipcMain.on('delete-history', (request, data) => {
+            let history = this.db.getCollection('history');
+            if(history){
+                history.findAndRemove({analyzedUrl: data.key});
+                request.reply('history-update', history.chain().data());
+            }
+        });
+
+        this.ipcMain.on('clean-history', (request, key) => {
+            let history = this.db.getCollection('history');
+            history.clear();
+            request.reply('history-update', history.chain().data());
+        });
+
         this.ipcMain.on('start-analyze', (request, url) => {
             this.fetchUrl(url, {rejectUnauthorized: false}, (error, meta, body) => {
                 if (!error) {
@@ -236,12 +250,12 @@ class LetMeSeo {
             if (meta.attributes) {
                 if (meta.attributes.name) {
                     //Robots
-                    if (meta.attributes.name.toLowerCase() === 'robots') {
+                    if (meta.attributes.name.toLowerCase() === 'robots' && meta.attributes.content) {
                         analysis.robots = meta.attributes.content.toLowerCase();
                     }
 
                     //ViewPort
-                    if (meta.attributes.name.toLowerCase() === 'viewport') {
+                    if (meta.attributes.name.toLowerCase() === 'viewport' && meta.attributes.content) {
                         analysis.mobile = meta.attributes.content.toLowerCase();
                     }
 

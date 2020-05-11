@@ -38,6 +38,9 @@ export default class Main extends React.Component
                 primary: {
                     main: '#424C55',
                 },
+                secondary: {
+                    main: '#ffd231',
+                },
             },
             overrides: {
                 MuiFormControlLabel: {
@@ -177,7 +180,7 @@ export default class Main extends React.Component
                     <Grid item xs={9}>
                         {
                             this.state.selectedSection === 'analyze' ? <Analyze keptData={this.state.keptData} keepDataHandler={this.keepDataHandler.bind(this)} /> :
-                            this.state.selectedSection === 'history' ? <History data={this.state.historyData} /> :
+                            this.state.selectedSection === 'history' ? <History data={this.state.historyData} keepDataHandler={this.keepDataHandler.bind(this)} /> :
                             this.state.selectedSection === 'settings' ? <Settings darkMode={this.themeModeHandler.bind(this)} darkModeEnabled={this.state.darkMode} /> :
                             this.state.selectedSection === 'about' ? <About /> : ''
                         }

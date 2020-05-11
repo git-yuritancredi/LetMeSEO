@@ -29,6 +29,10 @@ img {
     padding-left: 15px;
     padding-right: 15px;
 }
+.scroll-inner{
+    overflow-y: scroll;
+    height: calc(100vh - 150px);
+}
 .heading{
     padding: 22px;
     margin-bottom: 20px;
@@ -196,11 +200,14 @@ img {
     margin-bottom: 10px;
 }
 .analysis-conainer-inner .content-tag{
-    background-color: #3c3c3c;
+    background-color: #d3d0cb;
     padding: 20px;
     line-height: 20px;
     margin-bottom: 10px;
     -webkit-user-select: all;
+}
+#dark-mode .analysis-conainer-inner .content-tag{
+    background-color: #3c3c3c;
 }
 .analysis-conainer-inner .content-tag.no-wrapping{
     overflow: hidden;
@@ -217,11 +224,17 @@ img {
     background-color: transparent;
 }
 *::-webkit-scrollbar-thumb {
-    background: rgba(8, 204, 184, 0.2);
+    background: rgba(66, 76, 85, 0.2);
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover {
+#dark-mode *::-webkit-scrollbar-thumb{
+    background: rgba(8, 204, 184, 0.2);
+}
+*::-webkit-scrollbar-thumb:hover {
+    background: rgba(66, 76, 85, 0.5);
+}
+#dark-mode *::-webkit-scrollbar-thumb:hover {
     background: rgba(8, 204, 184, 0.5);
 }
