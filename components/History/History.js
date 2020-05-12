@@ -121,7 +121,9 @@ export default class History extends React.Component
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.state.data.length ? this.state.data.map((row) => {
+                                    {this.state.data.length ?
+                                        this.state.data.slice((this.state.currentPage * this.state.itemsPerPage), ((this.state.currentPage+1) * this.state.itemsPerPage))
+                                            .map((row) => {
                                         return (
                                             <TableRow hover role="checkbox" tabIndex={-1} key={row.analyzedUrl+"-row"}>
                                                 <TableCell key={row.analyzedUrl} align="center">

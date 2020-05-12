@@ -90,7 +90,7 @@ export default class Analyze extends React.Component
                 </Box>
                 <Grid className="container" container>
                     <Grid item xs={12}>
-                        <TextField id="standard-basic" label="Insert here the url to analyze" error={!this.state.validUrl} onChange={this.inputHandler.bind(this)} value={this.state.analyzeUrl} variant="outlined" size="small" autoFocus fullWidth/>
+                        <TextField id="standard-basic" label="Insert here the url to analyze" disabled={this.state.analysis !== null} error={!this.state.validUrl} onChange={this.inputHandler.bind(this)} value={this.state.analyzeUrl} variant="outlined" size="small" autoFocus fullWidth/>
                     </Grid>
                 </Grid>
                 <Grid className="analysis-conainer" container>
