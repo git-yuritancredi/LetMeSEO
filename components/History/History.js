@@ -104,9 +104,9 @@ export default class History extends React.Component
                         </Grid>
                     </Grid>
                 </Box>
-                <Grid className="container scroll-inner" container>
+                <Grid className="container" container>
                     <Grid item xs={12}>
-                        <TableContainer className="data-table">
+                        <TableContainer className="data-table scroll-inner">
                             <Table stickyHeader>
                                 <TableHead>
                                     <TableRow>
