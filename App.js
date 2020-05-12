@@ -171,7 +171,10 @@ class LetMeSeo {
                                     history.insert(analyzed);
                                 }else {
                                     history.findAndUpdate({analyzedUrl: analyzed.analyzedUrl}, (check) => {
-                                        return analyzed;
+                                        Object.keys(analyzed).map((key) => {
+                                           check[key] = analyzed[key];
+                                        });
+                                        return check;
                                     });
                                 }
                                 request.reply('history-update', history.chain().data());
@@ -340,6 +343,8 @@ class LetMeSeo {
         let points = 0.0;
         if (data.canonical) {
             points = points + 1.0;
+        }else{
+            points = points - 1.0;
         }
         if (data.mobile) {
             if (data.mobile.indexOf('width=device-width') !== -1 && data.mobile.indexOf('initial-scale=1') !== -1) {
@@ -353,13 +358,18 @@ class LetMeSeo {
         }
         if(!data.meta.description){
             points = points - 1.0;
-        }else if(data.meta.description.length > 120 && data.meta.description.length < 158){
+        }else if(data.meta.description.length >= 120 && data.meta.description.length <= 158){
             points = points + 1.0;
         }
         if(data.titles.h1 > 1 || data.titles.h1 === 0){
             points = points - 0.5;
-        }else if((data.titles.h2 < data.titles.h3) && (data.titles.h3 < data.titles.h4) && (data.titles.h1 === 1)){
-            points = points + 0.5
+        }else {
+            if(
+                ((data.titles.h2 < data.titles.h3) || data.titles.h3 === 0) &&
+                ((data.titles.h3 < data.titles.h4) || data.titles.h4 === 0)
+            ){
+                points = points + 0.5
+            }
         }
         if(data.imageNoAlt.length === 0){
             points = points + 0.5
