@@ -100,7 +100,7 @@ class LetMeSeo {
             let history = this.db.addCollection('history');
             let data    = [];
             if(history){
-                data = history.chain().data();
+                data = history.chain().simplesort('analysisPoints').data();
             }
             request.reply('history-update', data);
         });
@@ -131,14 +131,14 @@ class LetMeSeo {
             let history = this.db.getCollection('history');
             if(history){
                 history.findAndRemove({analyzedUrl: data.key});
-                request.reply('history-update', history.chain().data());
+                request.reply('history-update', history.chain().simplesort('analysisPoints').data());
             }
         });
 
         this.ipcMain.on('clean-history', (request, key) => {
             let history = this.db.getCollection('history');
             history.clear();
-            request.reply('history-update', history.chain().data());
+            request.reply('history-update', history.chain().simplesort('analysisPoints').data());
         });
 
         this.ipcMain.on('start-analyze', (request, url) => {
@@ -177,7 +177,7 @@ class LetMeSeo {
                                         return check;
                                     });
                                 }
-                                request.reply('history-update', history.chain().data());
+                                request.reply('history-update', history.chain().simplesort('analysisPoints').data());
                             }
                         }
                         this.db.saveDatabase();

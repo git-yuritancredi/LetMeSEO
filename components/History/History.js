@@ -13,17 +13,23 @@ import {
     TableHead,
     TableRow,
     IconButton,
+    InputAdornment,
     Dialog,
     DialogTitle,
     DialogContent,
     DialogContentText,
-    DialogActions
+    DialogActions,
+    OutlinedInput,
+    InputLabel,
+    FormControl
 } from "@material-ui/core";
 import Rating from '@material-ui/lab/Rating';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CallMissedOutgoingIcon from '@material-ui/icons/CallMissedOutgoing';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import BackspaceIcon from '@material-ui/icons/Backspace';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 export default class History extends React.Component
 {
@@ -33,6 +39,8 @@ export default class History extends React.Component
             analyzedSites: 0,
             confirmOpened: false,
             data: props.data,
+            originalData: [],
+            searchString: "",
             itemsPerPage: 20,
             openedRows: [],
             currentPage: 0,
@@ -88,6 +96,64 @@ export default class History extends React.Component
         this.state.setAnalysisData('analyze', row);
     }
 
+    searchHandler(e){
+        let searchString = e.target.value;
+        let toMap = this.state.data;
+        let mapped = [];
+        if(this.state.originalData.length > 0){
+            toMap = this.state.originalData;
+        }
+
+        if(searchString.indexOf('points:') > -1){
+            let operator = searchString.split(':');
+            operator = operator[1];
+            let value = operator.split('=');
+            operator = value[0];
+            let valueBtw = parseFloat(value[2]);
+            value = parseFloat(value[1]);
+
+            if(!isNaN(value)){
+                mapped = toMap.filter((item) => {
+                    if(operator === "eq") {
+                        return item.analysisPoints === value;
+                    }else if(operator === "neq"){
+                        return item.analysisPoints !== value;
+                    }else if(operator === "gt"){
+                        return item.analysisPoints > value;
+                    }else if(operator === "gte"){
+                        return item.analysisPoints >= value;
+                    }else if(operator === "lt"){
+                        return item.analysisPoints < value;
+                    }else if(operator === "lte"){
+                        return item.analysisPoints <= value;
+                    }else if(operator === "btw" && !isNaN(valueBtw)){
+                        return item.analysisPoints >= value && item.analysisPoints <= valueBtw;
+                    }
+                });
+            }
+        }else{
+            mapped = toMap.filter((item) => {
+                return item.analyzedUrl.indexOf(searchString) > -1;
+            });
+        }
+        this.setState((previousState) => ({
+            data: mapped,
+            searchString: searchString,
+            originalData: previousState.originalData.length === 0 ? previousState.data : previousState.originalData
+        }));
+    }
+
+    infoHandler(){
+
+    }
+
+    clearSearchHandle(){
+        this.setState((previousState) => ({
+            data: previousState.originalData,
+            searchString: ""
+        }));
+    }
+
     render() {
         return (
             <Box className="content-container">
@@ -103,6 +169,30 @@ export default class History extends React.Component
                     </Grid>
                 </Box>
                 <Grid className="container" container>
+                    <Grid item xs={12}>
+                        <FormControl size="small" fullWidth variant="outlined">
+                            <InputLabel htmlFor="standard-basic">Search...</InputLabel>
+                            <OutlinedInput
+                                id="standard-basic"
+                                label="Search..."
+                                onChange={this.searchHandler.bind(this)}
+                                variant="outlined"
+                                value={this.state.searchString}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="Clear search"
+                                            onClick={this.state.searchString ? this.clearSearchHandle.bind(this) : this.infoHandler.bind(this)}
+                                        >
+                                            {this.state.searchString ? <BackspaceIcon/> : <HelpOutlineIcon />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                            />
+                        </FormControl>
+                    </Grid>
+                </Grid>
+                <Grid className="container histroy-container" container>
                     <Grid item xs={12}>
                         <TableContainer className="data-table scroll-inner">
                             <Table stickyHeader>

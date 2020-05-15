@@ -31,7 +31,7 @@ img {
 }
 .scroll-inner{
     overflow-y: scroll;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 260px);
 }
 .heading{
     padding: 22px;
@@ -237,4 +237,7 @@ img {
 }
 #dark-mode *::-webkit-scrollbar-thumb:hover {
     background: rgba(8, 204, 184, 0.5);
+}
+.histroy-container{
+    margin-top: 20px;
 }
