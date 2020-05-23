@@ -21,7 +21,11 @@ import {
     DialogActions,
     OutlinedInput,
     InputLabel,
-    FormControl
+    FormControl,
+    List,
+    ListItem,
+    ListItemText,
+    Divider
 } from "@material-ui/core";
 import Rating from '@material-ui/lab/Rating';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -30,6 +34,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import BackspaceIcon from '@material-ui/icons/Backspace';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import CloseIcon from '@material-ui/icons/Close';
 
 export default class History extends React.Component
 {
@@ -38,6 +43,7 @@ export default class History extends React.Component
         this.state = {
             analyzedSites: 0,
             confirmOpened: false,
+            infoOpened: false,
             data: props.data,
             originalData: [],
             searchString: "",
@@ -144,7 +150,15 @@ export default class History extends React.Component
     }
 
     infoHandler(){
+        this.setState({
+            infoOpened: true
+        });
+    }
 
+    closeInfoHandler(){
+        this.setState({
+            infoOpened: false
+        });
     }
 
     clearSearchHandle(){
@@ -184,7 +198,7 @@ export default class History extends React.Component
                                             aria-label="Clear search"
                                             onClick={this.state.searchString ? this.clearSearchHandle.bind(this) : this.infoHandler.bind(this)}
                                         >
-                                            {this.state.searchString ? <BackspaceIcon/> : <HelpOutlineIcon />}
+                                            {this.state.searchString ? <BackspaceIcon/> : <HelpOutlineIcon onClick={this.infoHandler.bind(this)} />}
                                         </IconButton>
                                     </InputAdornment>
                                 }
@@ -277,6 +291,69 @@ export default class History extends React.Component
                         </Button>
                         <Button onClick={this.proceedClean.bind(this)} variant="outlined" className="danger-btn" autoFocus>
                             PROCEED
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    className="popup-info-search"
+                    open={this.state.infoOpened}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    fullWidth
+                    maxWidth="md"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        <IconButton edge="start" color="default" onClick={this.closeInfoHandler.bind(this)}>
+                            <CloseIcon />
+                        </IconButton>
+                        Search instructions
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            <Typography variant="subtitle1" color="textPrimary">Simple site search</Typography>
+                            <Divider variant="fullWidth" />
+                            <Typography variant="body2">You just simply search site url in the bar.</Typography>
+                            <br />
+                            <Typography variant="subtitle1" color="textPrimary">Advanced search</Typography>
+                            <Divider variant="fullWidth" />
+                            <Typography variant="body2">You can search by LetMeScore using this syntax:</Typography>
+                            <List dense>
+                                <ListItem>
+                                    <ListItemText>
+                                        <code>points:eq=<strong>x</strong></code> indicate that LetMeScore must be equal to value specified in x
+                                    </ListItemText>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText>
+                                        <code>points:gt=<strong>x</strong></code> indicate that LetMeScore must be grater than value specified in x
+                                    </ListItemText>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText>
+                                        <code>points:gte=<strong>x</strong></code> indicate that LetMeScore must be grater than equal to value specified in x
+                                    </ListItemText>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText>
+                                        <code>points:lt=<strong>x</strong></code> indicate that LetMeScore must be lower than value specified in x
+                                    </ListItemText>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText>
+                                        <code>points:lte=<strong>x</strong></code> indicate that LetMeScore must be lower than equal value specified in x
+                                    </ListItemText>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText>
+                                        <code>points:btw=<strong>x</strong>=<strong>y</strong></code> indicate that LetMeScore must be between value specified in x and y
+                                    </ListItemText>
+                                </ListItem>
+                            </List>
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.closeInfoHandler.bind(this)} autoFocus>
+                            OK
                         </Button>
                     </DialogActions>
                 </Dialog>

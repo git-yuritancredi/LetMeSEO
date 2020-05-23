@@ -241,3 +241,7 @@ img {
 .histroy-container{
     margin-top: 20px;
 }
+.popup-info-search .MuiDialogContent-root .MuiDivider-root{
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
