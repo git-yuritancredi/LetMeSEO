@@ -120,8 +120,8 @@ export default class History extends React.Component
 
             if(!isNaN(value)){
                 mapped = toMap.filter((item) => {
-                    if(operator === "eq") {
-                        return item.analysisPoints === value;
+                    if (operator === "eq") {
+                        return value === 0 ? item.analysisPoints <= value : item.analysisPoints === value;
                     }else if(operator === "neq"){
                         return item.analysisPoints !== value;
                     }else if(operator === "gt"){
