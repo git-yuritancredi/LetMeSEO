@@ -17,13 +17,13 @@ git clone https://github.com/git-yuritancredi/LetMeSEO
 cd LetMeSEO
 # Install dependencies
 npm install
-# Run the app
-npm start
+# Run the app in development mode
+npm run dev
 ```
 
 #### Portable app (All platforms)
 
-If you use a Mac and want to export for other OS, you must install [wine](https://wiki.winehq.org/MacOS) for build portable app
+You can find all exported app (after building process) on 'build' folder
 
 ```bash
 # Clone this repository
@@ -32,16 +32,37 @@ git clone https://github.com/git-yuritancredi/LetMeSeo
 cd LetMeSeo
 # Install dependencies
 npm install
-
-# Build app only Linux
-npm run-script build-lnx
-
-# Build app only Mac
-npm run-script build-mac
-
-# Build app only Windows
-npm run-script build-win
-
-# Build app for all platforms
-npm run-script build-all
+# Pack app
+npm run pack
 ```
+
+#### Emulate production
+
+```bash
+# Clone this repository
+git clone https://github.com/git-yuritancredi/LetMeSeo
+# Go into the repository
+cd LetMeSeo
+# Install dependencies
+npm install
+# Build app
+npm run build
+# Pack app
+npm run prod
+```
+
+#### Build or rebuild app
+```bash
+# To build app without clean
+npm run build
+
+# To build app with clean
+npm run rebuild
+```
+
+#### Todo's
+- [ ] Add language support
+- [ ] Add Rich Snippet support
+- [ ] Add site text content analyzer
+
+The portable app is available only on x64 systems, if you want to export for different architectures you can edit the `package.json` file and add more architectires.

@@ -8,7 +8,7 @@
     "prod": "DEVELOPMENT=1 electron .",
     "build": "gulp build",
     "rebuild": "gulp rebuild",
-    "pack": "npm run rebuild && electron-builder build -ml -w portable"
+    "pack": "npm run rebuild && electron-builder build -mlw --x64"
   },
   "build": {
     "appId": "opensource.letmeseo.app",
