@@ -1,9 +1,10 @@
 class LetMeSeo {
     constructor() {
-        const {electron, app, BrowserWindow, ipcMain, nativeTheme} = require('electron');
+        const {electron, app, BrowserWindow, ipcMain, nativeTheme, Menu} = require('electron');
         const connector = require('lokijs');
         this.path = require('path');
         this.he = require('he');
+        this.fs = require('fs');
         this.electron = electron;
         this.app = app;
         this.windows = BrowserWindow;
@@ -12,7 +13,45 @@ class LetMeSeo {
         this.nativeTheme = nativeTheme;
         this.fetchUrl = require('fetch').fetchUrl;
         this.htmlParser = require('node-html-parser');
-        this.db = new connector(this.app.getAppPath() + this.path.sep + 'letmeseo.db', {
+
+        const menuTemplate = [
+            {
+                label: 'LetMeSeo',
+                submenu: [
+                    {
+                        label: "About",
+                        click: () => {
+                            this.mainWindow.webContents.send('change-section', 'about');
+                        }
+                    },
+                    {
+                        label: "Quit",
+                        role: 'quit',
+                        click: () => {
+                            this.app.quit();
+                        }
+                    }
+                ]
+            },
+            {
+                label: 'Edit',
+                submenu: [
+                    { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+                    { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+                    { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" }
+                ]
+            }
+        ];
+        Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+
+        let dbPath = this.path.join(__dirname, '/letmeseo.db');
+        if(process.env.DEVELOPMENT !== '1'){
+            if(!this.fs.existsSync(this.path.join(__dirname, '/../data'))){
+                this.fs.mkdirSync(this.path.join(__dirname, '/../data'));
+            }
+            dbPath = this.path.join(__dirname, '/../data/letmeseo.db');
+        }
+        this.db = new connector(dbPath, {
             autoload: true,
             autoloadCallback: this.initDb.bind(this),
         });

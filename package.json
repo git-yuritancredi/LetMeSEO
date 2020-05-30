@@ -4,7 +4,36 @@
   "description": "Analyze site SEO",
   "main": "App.js",
   "scripts": {
-    "start": "gulp start"
+    "dev": "gulp run",
+    "prod": "DEVELOPMENT=1 electron .",
+    "build": "gulp build",
+    "rebuild": "gulp rebuild",
+    "pack": "electron-builder build -m -l -w"
+  },
+  "build": {
+    "appId": "opensource.letmeseo.app",
+    "productName": "LetMeSeo",
+    "directories": {
+      "output": "build"
+    },
+    "files": ["App.js", "app/**/*", "assets/images/*", "!gulpfile.js", "!.babelrc", "!.babelrc", "!.gitignore", "!letmeseo.db", "!components"],
+    "compression": "maximum",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "./assets/build/icon.icns",
+      "asar": true
+    },
+    "win": {
+      "target": "portable",
+      "icon": "./assets/build/icon.ico",
+      "publisherName": "Yuri Tancredi"
+    },
+    "linux": {
+      "target": "AppImage",
+      "executableName": "LetMeSeo",
+      "category": "Development",
+      "description": "Analyze site SEO"
+    }
   },
   "repository": {
     "type": "git",
@@ -21,6 +50,7 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "electron": "^8.2.5",
+    "electron-builder": "^22.7.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.3.0",

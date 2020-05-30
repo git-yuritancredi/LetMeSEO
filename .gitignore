@@ -1,7 +1,8 @@
 .DS_Store
 package-lock.json
 node_modules
-app/*
-!app/assets
+app
+!assets
 .idea
 letmeseo.db
+build

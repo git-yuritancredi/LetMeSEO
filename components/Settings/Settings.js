@@ -64,7 +64,7 @@ export default class Settings extends React.Component
                     <Grid alignItems="center" container>
                         <Grid item xs={9}>
                             <Typography variant="h3" color="textPrimary">Settings</Typography>
-                            <Typography variant="subtitle1" color="textSecondary">Change memorization settings, app theme and more...</Typography>
+                            <Typography variant="subtitle1" color="textSecondary">Set your preferred settings.</Typography>
                         </Grid>
                         <Grid item xs={3}>
                             <Button variant="contained" color="primary" size="large" onClick={this.saveHandler.bind(this)} fullWidth disableElevation>SAVE SETTINGS</Button>

@@ -15,8 +15,8 @@ export default class Main extends React.Component
     constructor(props) {
         super(props);
 
-        this.defaultLogo    = '../app/assets/images/logo_light.svg'
-        this.darkLogo       = '../app/assets/images/logo_dark.svg';
+        this.defaultLogo    = '../assets/images/logo_light.svg'
+        this.darkLogo       = '../assets/images/logo_dark.svg';
         let darkMode        = electron.ipcRenderer.sendSync('system-mode');
 
         this.state = {
