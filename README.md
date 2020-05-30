@@ -47,7 +47,7 @@ cd LetMeSeo
 npm install
 # Build app
 npm run build
-# Pack app
+# Run the app in production mode (no file watcher)
 npm run prod
 ```
 
@@ -64,5 +64,3 @@ npm run rebuild
 - [ ] Add language support
 - [ ] Add Rich Snippet support
 - [ ] Add site text content analyzer
-
-The portable app is available only on x64 systems, if you want to export for different architectures you can edit the `package.json` file and add more architectires.
