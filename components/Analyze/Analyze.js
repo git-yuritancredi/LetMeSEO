@@ -35,11 +35,17 @@ export default class Analyze extends React.Component
     }
 
     analyzeHandler(){
-        this.setState({
-            startAnimation: true,
-            analysis: null
-        });
-        electron.ipcRenderer.send('start-analyze', this.state.analyzeUrl);
+        if(this.state.analyzeUrl) {
+            this.setState({
+                startAnimation: true,
+                analysis: null
+            });
+            electron.ipcRenderer.send('start-analyze', this.state.analyzeUrl);
+        }else{
+            this.setState({
+                validUrl: false
+            });
+        }
     }
 
     inputHandler(e){
