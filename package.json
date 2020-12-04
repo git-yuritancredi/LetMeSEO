@@ -16,7 +16,17 @@
     "directories": {
       "output": "build"
     },
-    "files": ["App.js", "app/**/*", "assets/images/*", "!gulpfile.js", "!.babelrc", "!.babelrc", "!.gitignore", "!letmeseo.db", "!components"],
+    "files": [
+      "App.js",
+      "app/**/*",
+      "assets/images/*",
+      "!gulpfile.js",
+      "!.babelrc",
+      "!.babelrc",
+      "!.gitignore",
+      "!letmeseo.db",
+      "!components"
+    ],
     "compression": "maximum",
     "mac": {
       "category": "public.app-category.developer-tools",
@@ -46,25 +56,25 @@
   },
   "homepage": "https://github.com/git-yuritancredi/LetMeSEO#readme",
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "@babel/preset-react": "^7.9.4",
-    "electron": "^8.2.5",
-    "electron-builder": "^22.7.0",
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-react": "^7.12.7",
+    "electron": "^8.5.5",
+    "electron-builder": "^22.9.1",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1"
   },
   "dependencies": {
-    "@material-ui/core": "^4.9.12",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.52",
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
     "fetch": "^1.1.0",
     "he": "^1.2.0",
-    "lokijs": "^1.5.8",
-    "node-html-parser": "^1.2.16",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "lokijs": "^1.5.11",
+    "node-html-parser": "^1.4.9",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
   }
 }
