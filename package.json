@@ -73,7 +73,7 @@
     "fetch": "^1.1.0",
     "he": "^1.2.0",
     "lokijs": "^1.5.12",
-    "node-html-parser": "^1.4.9",
+    "node-html-parser": "^3.3.6",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   }
