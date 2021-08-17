@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, IconButton, Button } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import MinimizeIcon from '@material-ui/icons/Minimize';
@@ -7,7 +7,7 @@ import MinimizeIcon from '@material-ui/icons/Minimize';
 
 export default class UserToolbar extends React.Component
 {
-    closeHandler() {
+    closeHandler() {
         electron.ipcRenderer.send('quit-app');
     }
 

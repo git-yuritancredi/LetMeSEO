@@ -3,6 +3,7 @@ import {Button, Box, Typography, Grid, TextField} from '@material-ui/core';
 import Placeholder from './Placeholder';
 import Analysis from "./Analysis";
 import electron from "electron";
+import {i18n} from '../language';
 
 export default class Analyze extends React.Component
 {
@@ -78,25 +79,25 @@ export default class Analyze extends React.Component
                 <Box className="heading">
                     <Grid alignItems="center" container>
                         <Grid item xs={9}>
-                            <Typography variant="h3" color="textPrimary">Analyze</Typography>
-                            <Typography variant="subtitle1" color="textSecondary">Insert in the form below the URL to analyze</Typography>
+                            <Typography variant="h3" color="textPrimary">{i18n.__("Analyze")}</Typography>
+                            <Typography variant="subtitle1" color="textSecondary">{i18n.__("Insert in the form below the URL to analyze")}</Typography>
                         </Grid>
                         <Grid item xs={3}>
                             {
                                 this.state.analysis === null ?
                                 <Button variant="contained" color="primary" size="large"
                                     onClick={this.analyzeHandler.bind(this)} fullWidth
-                                    disableElevation>ANALYZE</Button> :
+                                    disableElevation>{i18n.__("ANALYZE")}</Button> :
                                 <Button variant="contained" color="primary" size="large"
                                         onClick={this.clearHandler.bind(this)} fullWidth
-                                        disableElevation>CLEAR ANALYSIS</Button>
+                                        disableElevation>{i18n.__("CLEAR ANALYSIS")}</Button>
                             }
                         </Grid>
                     </Grid>
                 </Box>
                 <Grid className="container" container>
                     <Grid item xs={12}>
-                        <TextField id="standard-basic" label="Insert here the url to analyze" disabled={this.state.analysis !== null} error={!this.state.validUrl} onChange={this.inputHandler.bind(this)} value={this.state.analyzeUrl} variant="outlined" size="small" autoFocus fullWidth/>
+                        <TextField id="standard-basic" label={i18n.__("Insert here the url to analyze")} disabled={this.state.analysis !== null} error={!this.state.validUrl} onChange={this.inputHandler.bind(this)} value={this.state.analyzeUrl} variant="outlined" size="small" autoFocus fullWidth/>
                     </Grid>
                 </Grid>
                 <Grid className="analysis-conainer" container>

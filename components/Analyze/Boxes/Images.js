@@ -2,6 +2,7 @@ import {Badge, Box, Divider, Typography} from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import React from "react";
+import {i18n} from "../../language";
 
 export default class Images extends React.Component
 {
@@ -15,7 +16,7 @@ export default class Images extends React.Component
         return (
             <Box className="tag-analysis-container">
                 <Typography variant="h5" color="textPrimary" className="title-tag">
-                    { this.props.images.length > 0 ? <WarningIcon color="secondary" /> : <CheckCircleIcon color="primary" /> } Images alt attribute
+                    { this.props.images.length > 0 ? <WarningIcon color="secondary" /> : <CheckCircleIcon color="primary" /> } {i18n.__("Images alt attribute")}
                     { this.props.images.length > 0 ? <Badge badgeContent="0" color="secondary" /> : <Badge badgeContent="+0.5" color="primary" /> }
                 </Typography>
                 <Divider variant="fullWidth" />
@@ -27,8 +28,8 @@ export default class Images extends React.Component
                     </Box> : ''
                 }
                 <Typography variant="subtitle1" className="description-tag" color="textSecondary">
-                    Alt attribute provide a text alternative for search engines. <br />
-                    Applying images to alt attribute such as product photos can positively impact an ecommerce store's search engine rankings.
+                    {i18n.__("Alt attribute provide a text alternative for search engines.")} <br />
+                    {i18n.__("Applying images to alt attribute such as product photos can positively impact an ecommerce store's search engine rankings.")}
                 </Typography>
             </Box>
         );

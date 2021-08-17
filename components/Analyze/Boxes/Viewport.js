@@ -2,6 +2,7 @@ import {Badge, Box, Divider, Typography} from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
+import {i18n} from "../../language";
 
 export default class Viewport extends React.Component
 {
@@ -20,7 +21,7 @@ export default class Viewport extends React.Component
                 <Typography variant="h5" color="textPrimary" className="title-tag">
                     {
                         this.validViewport() ? <CheckCircleIcon color="primary" /> : <ErrorIcon color="error" />
-                    } Viewport
+                    } {i18n.__("Viewport")}
                     {
                         this.validViewport() ? <Badge badgeContent="+0.5" color="primary" /> : <Badge badgeContent="0" color="secondary" />
                     }
@@ -30,8 +31,8 @@ export default class Viewport extends React.Component
                     this.props.mobile ? <Box className="content-tag"><Typography variant="body2" color="primary">{this.props.mobile}</Typography></Box> : ""
                 }
                 <Typography variant="subtitle1" className="description-tag" color="textSecondary">
-                    About 48% of people will use a mobile search to find information about a product or business. This means you need to focus attention on responsive and mobile designs.<br />
-                    To inform search engines you have a responsive design available, you must use the meta viewport tag.
+                    {i18n.__("About 48% of people will use a mobile search to find information about a product or business. This means you need to focus attention on responsive and mobile designs.")}<br />
+                    {i18n.__("To inform search engines you have a responsive design available, you must use the meta viewport tag.")}
                 </Typography>
             </Box>
         );

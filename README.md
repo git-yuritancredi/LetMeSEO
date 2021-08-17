@@ -60,7 +60,13 @@ npm run build
 npm run rebuild
 ```
 
+### Supported languages
+| Language | Full support |
+|----------|--------------|
+| :uk: English | :white_check_mark: |
+| :it: Italiano | :white_check_mark: |
+
 #### Todo's
-- [ ] Add language support
+- [x] Add language support
 - [ ] Add Rich Snippet support
 - [ ] Add site text content analyzer
