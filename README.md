@@ -63,8 +63,8 @@ npm run rebuild
 ### Supported languages
 | Language | Full support |
 |----------|--------------|
-| :uk: English | :white_check_mark: |
-| :it: Italiano | :white_check_mark: |
+| :uk:&nbsp; English | &nbsp; &nbsp; &nbsp; &nbsp; :white_check_mark: |
+| :it:&nbsp; Italiano | &nbsp; &nbsp; &nbsp; &nbsp; :white_check_mark: |
 
 #### Todo's
 - [x] Add language support
