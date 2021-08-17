@@ -12,7 +12,7 @@ export default class About extends React.Component
     render() {
         return (
             <Box className="content-container full-height">
-                <Grid container justify="center" className="about-section full-height" alignItems="center">
+                <Grid container justifyContent="center" className="about-section full-height" alignItems="center">
                     <Grid item xs={6}>
                         <Grid className="abount-content">
                             <Avatar src="../assets/images/avatar.jpg" />

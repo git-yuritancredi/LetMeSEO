@@ -20,7 +20,7 @@ export default class AppMenu extends React.Component
         return (
             <>
                 <img src={this.props.logo} onClick={() => { this.changeSectionHandle('analyze') }} id="logo" />
-                <Grid direction="column" justify="space-between" alignItems="stretch" className="menu-grid" container>
+                <Grid direction="column" justifyContent="space-between" alignItems="stretch" className="menu-grid" container>
                     <Grid item>
                         <List component="nav" aria-label="main mailbox folders">
                             <ListItem selected={this.props.selected === 'analyze'} onClick={() => { this.changeSectionHandle('analyze') }} button>

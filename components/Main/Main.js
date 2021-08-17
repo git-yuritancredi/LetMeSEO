@@ -1,5 +1,5 @@
-import React, {useMemo} from 'react';
-import { Grid, Snackbar, ThemeProvider, createMuiTheme } from "@material-ui/core";
+import React from 'react';
+import { Grid, Snackbar, ThemeProvider, createTheme } from "@material-ui/core";
 import { Alert } from '@material-ui/lab';
 import electron from 'electron';
 
@@ -32,7 +32,7 @@ export default class Main extends React.Component
             errorMessage: null
         };
 
-        this.defaultTheme = createMuiTheme({
+        this.defaultTheme = createTheme({
             palette: {
                 type: 'light',
                 primary: {
@@ -74,7 +74,7 @@ export default class Main extends React.Component
             },
         });
 
-        this.darkTheme = createMuiTheme({
+        this.darkTheme = createTheme({
             palette: {
                 type: 'dark',
                 primary: {
@@ -102,7 +102,7 @@ export default class Main extends React.Component
                         fontSize: 14
                     }
                 },
-                MuiListItemText: {
+                MuiListItemText: {
                     primary: {
                         color: '#FFFFFF',
                     }
