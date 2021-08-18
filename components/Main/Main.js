@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Snackbar, ThemeProvider, createTheme } from "@material-ui/core";
 import { Alert } from '@material-ui/lab';
 import electron from 'electron';
+import {connect} from 'react-redux';
 
 import Analyze from './../Analyze/Analyze';
 import UserToolbar from "../UserToolbar/UserToolbar";
@@ -11,7 +12,7 @@ import History from "../History/History";
 import Settings from "../Settings/Settings";
 import {i18n} from '../language';
 
-export default class Main extends React.Component
+class Main extends React.Component
 {
     constructor(props) {
         super(props);
@@ -19,6 +20,8 @@ export default class Main extends React.Component
         this.defaultLogo    = '../assets/images/logo_light.svg'
         this.darkLogo       = '../assets/images/logo_dark.svg';
         let darkMode        = electron.ipcRenderer.sendSync('system-mode');
+
+        console.log(this.props);
 
         this.state = {
             selectedSection: 'analyze',
@@ -216,3 +219,5 @@ export default class Main extends React.Component
         });
     }
 }
+
+export default connect(null)(Main);
