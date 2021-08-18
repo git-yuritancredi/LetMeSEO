@@ -1,6 +1,6 @@
 {
   "name": "letmeseo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Analyze site SEO",
   "main": "App.js",
   "scripts": {
