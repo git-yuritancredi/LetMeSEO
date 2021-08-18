@@ -3,44 +3,45 @@ import {Button, Box, Typography, Grid, TextField} from '@material-ui/core';
 import Placeholder from './Placeholder';
 import Analysis from "./Analysis";
 import electron from "electron";
+import {connect} from "react-redux";
 import {i18n} from '../language';
+import {mapState} from "../store";
+import {setStoredAnalysis} from "../slices/appSlice";
 
-export default class Analyze extends React.Component
+class Analyze extends React.Component
 {
     constructor(props) {
         super(props);
         this.state = {
-            analyzeUrl: props.keptData ? props.keptData.analyzedUrl : '',
+            analyzeUrl: props.app.storedAnalysis ? props.app.storedAnalysis.analyzedUrl : '',
             validUrl: true,
-            analysis: props.keptData ? props.keptData : null,
-            analysisPoints: props.keptData ? props.keptData.analysisPoints : null,
             startAnimation: false,
             keepDataHandler: props.keepDataHandler
         };
 
         electron.ipcRenderer.on('analyze-done', (event, parsedData) => {
+            const data = {...parsedData};
             this.setState({
-                analysis: parsedData,
                 startAnimation: false
             });
-            parsedData.analyzedUrl = this.state.analyzeUrl;
-            this.state.keepDataHandler('analyze', parsedData);
+            data.analyzedUrl = this.state.analyzeUrl;
+            this.props.dispatch(setStoredAnalysis(data));
         });
 
         electron.ipcRenderer.on('analyze-error', () => {
             this.setState({
-                analysis: null,
                 startAnimation: false,
             });
+            this.props.dispatch(setStoredAnalysis(null));
         });
     }
 
     analyzeHandler(){
         if(this.state.analyzeUrl) {
             this.setState({
-                startAnimation: true,
-                analysis: null
+                startAnimation: true
             });
+            this.props.dispatch(setStoredAnalysis(null));
             electron.ipcRenderer.send('start-analyze', this.state.analyzeUrl);
         }else{
             this.setState({
@@ -67,10 +68,7 @@ export default class Analyze extends React.Component
     }
 
     clearHandler(){
-        this.setState({
-            analysis: null
-        });
-        this.state.keepDataHandler(null, null);
+        this.props.dispatch(setStoredAnalysis(null));
     }
 
     render() {
@@ -84,7 +82,7 @@ export default class Analyze extends React.Component
                         </Grid>
                         <Grid item xs={3}>
                             {
-                                this.state.analysis === null ?
+                                this.props.app.storedAnalysis === null ?
                                 <Button variant="contained" color="primary" size="large"
                                     onClick={this.analyzeHandler.bind(this)} fullWidth
                                     disableElevation>{i18n.__("ANALYZE")}</Button> :
@@ -97,7 +95,7 @@ export default class Analyze extends React.Component
                 </Box>
                 <Grid className="container" container>
                     <Grid item xs={12}>
-                        <TextField id="standard-basic" label={i18n.__("Insert here the url to analyze")} disabled={this.state.analysis !== null} error={!this.state.validUrl} onChange={this.inputHandler.bind(this)} value={this.state.analyzeUrl} variant="outlined" size="small" autoFocus fullWidth/>
+                        <TextField id="standard-basic" label={i18n.__("Insert here the url to analyze")} disabled={this.props.app.storedAnalysis !== null} error={!this.state.validUrl} onChange={this.inputHandler.bind(this)} value={this.state.analyzeUrl} variant="outlined" size="small" autoFocus fullWidth/>
                     </Grid>
                 </Grid>
                 <Grid className="analysis-conainer" container>
@@ -107,8 +105,8 @@ export default class Analyze extends React.Component
                                 this.state.startAnimation ?
                                     <Placeholder /> :
                                 (
-                                    this.state.analysis ?
-                                    <Analysis data={this.state.analysis} /> :
+                                    this.props.app.storedAnalysis ?
+                                    <Analysis data={this.props.app.storedAnalysis} /> :
                                     ''
                                 )
                             }
@@ -119,3 +117,5 @@ export default class Analyze extends React.Component
          );
     }
 }
+
+export default connect(mapState)(Analyze)

@@ -5,9 +5,12 @@ import HistoryIcon from '@material-ui/icons/History';
 import TuneIcon from '@material-ui/icons/Tune';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import electron from 'electron';
+import {connect} from "react-redux";
 import {i18n} from "../language";
+import {navigate} from "../slices/navigationSlice";
+import {mapState} from "../store";
 
-export default class AppMenu extends React.Component
+class AppMenu extends React.Component
 {
     constructor(props) {
         super(props);
@@ -20,13 +23,13 @@ export default class AppMenu extends React.Component
     render() {
         return (
             <>
-                <img src={this.props.logo} onClick={() => { this.changeSectionHandle('analyze') }} id="logo" />
+                <img src={this.props.app.logo} onClick={() => { this.changeSectionHandle('analyze') }} id="logo" />
                 <Grid direction="column" justifyContent="space-between" alignItems="stretch" className="menu-grid" container>
                     <Grid item>
                         <List component="nav" aria-label="main mailbox folders">
-                            <ListItem selected={this.props.selected === 'analyze'} onClick={() => { this.changeSectionHandle('analyze') }} button>
+                            <ListItem selected={this.props.navigation.section === 'analyze'} onClick={() => { this.changeSectionHandle('analyze') }} button>
                                 <ListItemIcon>
-                                    { this.props.badged === 'analyze' && this.props.selected !== 'analyze' ?
+                                    { this.props.app.storedAnalysis !== null && this.props.navigation.section !== 'analyze' ?
                                         <Badge color="primary" variant="dot">
                                             <BarChartIcon/>
                                         </Badge> :
@@ -36,21 +39,21 @@ export default class AppMenu extends React.Component
                                 <ListItemText primary={i18n.__("Analyze")} secondary={i18n.__("Analyze site SEO")} />
                             </ListItem>
                             <Divider />
-                            <ListItem selected={this.props.selected === 'history'} onClick={() => { this.changeSectionHandle('history') }} button>
+                            <ListItem selected={this.props.navigation.section === 'history'} onClick={() => { this.changeSectionHandle('history') }} button>
                                 <ListItemIcon>
                                     <HistoryIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={i18n.__("History")} secondary={i18n.__("You has analyzed %s sites", this.props.historyLength)} />
+                                <ListItemText primary={i18n.__("History")} secondary={i18n.__("You has analyzed %s sites", this.props.history.items.length)} />
                             </ListItem>
                             <Divider />
-                            <ListItem selected={this.props.selected === 'settings'} onClick={() => { this.changeSectionHandle('settings') }} button>
+                            <ListItem selected={this.props.navigation.section === 'settings'} onClick={() => { this.changeSectionHandle('settings') }} button>
                                 <ListItemIcon>
                                     <TuneIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={i18n.__("Settings")} secondary={i18n.__("Memory options and more")} />
                             </ListItem>
                             <Divider />
-                            <ListItem selected={this.props.selected === 'about'} onClick={() => { this.changeSectionHandle('about') }} button>
+                            <ListItem selected={this.props.navigation.section === 'about'} onClick={() => { this.changeSectionHandle('about') }} button>
                                 <ListItemIcon>
                                     <GitHubIcon />
                                 </ListItemIcon>
@@ -67,10 +70,12 @@ export default class AppMenu extends React.Component
     }
 
     changeSectionHandle(newSection){
-        this.props.handleChange(newSection);
+        this.props.dispatch(navigate(newSection));
     }
 
     openGitHubPage(){
         electron.shell.openExternal('https://github.com/git-yuritancredi');
     }
 }
+
+export default connect(mapState)(AppMenu);

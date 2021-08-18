@@ -11,25 +11,17 @@ import {
     Select,
     MenuItem
 } from "@material-ui/core";
-import electron from "electron";
+import {connect} from "react-redux";
 import {i18n} from '../language';
+import {saveConfig, setConfig} from "../slices/configSlice";
+import {mapState} from "../store";
 
-export default class Settings extends React.Component
+class Settings extends React.Component
 {
     constructor(props) {
         super(props);
         this.state = {
-            darkMode: this.props.darkModeEnabled,
-            saveHistory: this.props.saveHistory ? this.props.saveHistory : true,
-			language: this.props.language ? this.props.language : 'en',
             hasChanges: false
-        }
-
-        let configs = electron.ipcRenderer.sendSync('get-config');
-        if(configs.length > 0){
-            configs.map((config) => {
-                this.state[config.key] = config.value;
-            });
         }
     }
 
@@ -40,43 +32,56 @@ export default class Settings extends React.Component
     }
 
     themeModeHandler(e) {
-        this.props.darkMode(e.target.checked);
-        this.setState({
+        this.props.dispatch(setConfig({
             darkMode: e.target.checked,
+            saveHistory: this.props.config.saveHistory,
+            language: this.props.config.language
+        }));
+        this.setState({
             hasChanges: true
         });
     }
 
     historyHandler(e){
-        this.setState({
+        this.props.dispatch(setConfig({
+            darkMode: this.props.config.darkMode,
             saveHistory: e.target.checked,
+            language: this.props.config.language
+        }));
+        this.setState({
             hasChanges: true
         });
     }
 
     languageHandler(e) {
+        this.props.dispatch(setConfig({
+            darkMode: this.props.config.darkMode,
+            saveHistory: this.props.config.saveHistory,
+            language: e.target.value
+        }));
         this.setState({
-            language: e.target.value,
             hasChanges: true
         });
         i18n.setLocale(e.target.value);
     }
 
-    saveHandler(){
-        electron.ipcRenderer.send('save-config', [
-            {
-                key: 'darkMode',
-                value: this.state.darkMode
-            },
-            {
-                key: 'saveHistory',
-                value: this.state.saveHistory
-            },
-			{
-				key: 'language',
-				value: this.state.language
-			}
-        ]);
+    saveHandler() {
+        this.props.dispatch(
+            saveConfig([
+                {
+                    key: 'darkMode',
+                    value: this.props.config.darkMode
+                },
+                {
+                    key: 'saveHistory',
+                    value: this.props.config.saveHistory
+                },
+                {
+                    key: 'language',
+                    value: this.props.config.language
+                }
+            ])
+        );
         this.setState({
             hasChanges: false
         });
@@ -104,7 +109,7 @@ export default class Settings extends React.Component
                             <FormGroup row>
                                 <FormControlLabel control={
                                         <Switch
-                                            checked={this.state.darkMode}
+                                            checked={this.props.config.darkMode}
                                             onChange={this.themeModeHandler.bind(this)}
                                             color="primary"
                                             name="themeMode"
@@ -122,7 +127,7 @@ export default class Settings extends React.Component
                             <FormGroup row>
                                 <FormControlLabel control={
                                         <Switch
-                                            checked={this.state.saveHistory}
+                                            checked={this.props.config.saveHistory}
                                             onChange={this.historyHandler.bind(this)}
                                             color="primary"
                                             name="saveHistory"
@@ -139,7 +144,7 @@ export default class Settings extends React.Component
                             <Divider variant="fullWidth" />
                             <FormGroup row>
 								<Select
-									value={this.state.language}
+									value={this.props.config.language}
 									onChange={this.languageHandler.bind(this)}
 								>
 									<MenuItem value="en">{i18n.__("English")}</MenuItem>
@@ -153,3 +158,4 @@ export default class Settings extends React.Component
         );
     }
 }
+export default connect(mapState)(Settings);
