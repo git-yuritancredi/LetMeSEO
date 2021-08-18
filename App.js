@@ -42,7 +42,7 @@ class LetMeSeo {
                 ]
             }
         ];
-        //Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+        Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 
         let dbPath = this.path.join(__dirname, '/letmeseo.db');
         if(process.env.DEVELOPMENT !== '1'){
