@@ -3,6 +3,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import WarningIcon from "@material-ui/icons/Warning";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
+import {i18n} from '../../language';
 
 export default class Description extends React.Component
 {
@@ -31,7 +32,7 @@ export default class Description extends React.Component
                                     <WarningIcon color="secondary" /> :
                                     <ErrorIcon color="error"  />
                             )
-                    } Description
+                    } {i18n.__("Description")}
                     {
                         this.validDescription() === 3 ?
                             <Badge badgeContent="+1" color="primary" /> :
@@ -48,12 +49,12 @@ export default class Description extends React.Component
                 }
                 <Typography variant="subtitle1" className="description-tag" color="textSecondary">
                     {
-                        this.validDescription() === 3 ? "The meta description tag is correct." : (
+                        this.validDescription() === 3 ? i18n.__("The meta description tag is correct.") : (
                             this.validDescription() === 1 ?
-                                "The meta description tag is too short, try to keep your meta description between 120 and 158 characters." :
+                                i18n.__("The meta description tag is too short, try to keep your meta description between 120 and 158 characters.") :
                                 (this.validDescription() === 2 ?
-                                        "The meta description tag is too long, try to keep your meta description between 120 and 158 characters." :
-                                        "The meta description was not found, it serves the function of advertising copy and thus is a very visible and important part of search marketing."
+                                    i18n.__("The meta description tag is too long, try to keep your meta description between 120 and 158 characters.") :
+                                    i18n.__("The meta description was not found, it serves the function of advertising copy and thus is a very visible and important part of search marketing.")
                                 )
                         )
                     }
