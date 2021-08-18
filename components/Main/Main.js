@@ -15,23 +15,22 @@ import {mapState} from "../store";
 import {setConfig} from "../slices/configSlice";
 import {setLogo} from "../slices/appSlice";
 import {setHistory} from "../slices/historySlice";
+import {DARK_LOGO, DEFAULT_LOGO} from "../costants";
 
 class Main extends React.Component
 {
     constructor(props) {
         super(props);
-        this.defaultLogo    = '../assets/images/logo_light.svg'
-        this.darkLogo       = '../assets/images/logo_dark.svg';
         let darkMode        = electron.ipcRenderer.sendSync('system-mode');
 
         this.props.dispatch(setConfig({
             darkMode: darkMode,
-            saveHistory: false,
+            saveHistory: true,
             language: 'en'
         }));
 
         this.props.dispatch(setLogo(
-            darkMode ? this.darkLogo : this.defaultLogo,
+            darkMode ? DARK_LOGO : DEFAULT_LOGO,
         ));
 
         this.state = {
@@ -156,7 +155,7 @@ class Main extends React.Component
                 }
                 if(config.key === 'darkMode') {
                     this.props.dispatch(setLogo(
-                        config.value ? this.darkLogo : this.defaultLogo,
+                        config.value ? DARK_LOGO : DEFAULT_LOGO,
                     ));
                 }
             });

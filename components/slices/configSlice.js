@@ -5,7 +5,7 @@ export const configSlice = createSlice({
 	name: 'config',
 	initialState: {
 		darkMode: false,
-		saveHistory: false,
+		saveHistory: true,
 		language: 'en'
 	},
 	reducers: {

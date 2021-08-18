@@ -15,6 +15,8 @@ import {connect} from "react-redux";
 import {i18n} from '../language';
 import {saveConfig, setConfig} from "../slices/configSlice";
 import {mapState} from "../store";
+import {setLogo} from "../slices/appSlice";
+import {DARK_LOGO, DEFAULT_LOGO} from "../costants";
 
 class Settings extends React.Component
 {
@@ -37,6 +39,7 @@ class Settings extends React.Component
             saveHistory: this.props.config.saveHistory,
             language: this.props.config.language
         }));
+        this.props.dispatch(setLogo(e.target.checked ? DARK_LOGO : DEFAULT_LOGO));
         this.setState({
             hasChanges: true
         });
