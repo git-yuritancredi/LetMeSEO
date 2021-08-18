@@ -5,6 +5,7 @@ import HistoryIcon from '@material-ui/icons/History';
 import TuneIcon from '@material-ui/icons/Tune';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import electron from 'electron';
+import {i18n} from "../language";
 
 export default class AppMenu extends React.Component
 {
@@ -32,28 +33,28 @@ export default class AppMenu extends React.Component
                                         <BarChartIcon/>
                                     }
                                 </ListItemIcon>
-                                <ListItemText primary="Analyze" secondary="Analyze site SEO" />
+                                <ListItemText primary={i18n.__("Analyze")} secondary={i18n.__("Analyze site SEO")} />
                             </ListItem>
                             <Divider />
                             <ListItem selected={this.props.selected === 'history'} onClick={() => { this.changeSectionHandle('history') }} button>
                                 <ListItemIcon>
                                     <HistoryIcon />
                                 </ListItemIcon>
-                                <ListItemText primary="History" secondary={"You has analyzed " + this.props.historyLength + " sites"} />
+                                <ListItemText primary={i18n.__("History")} secondary={i18n.__("You has analyzed %s sites", this.props.historyLength)} />
                             </ListItem>
                             <Divider />
                             <ListItem selected={this.props.selected === 'settings'} onClick={() => { this.changeSectionHandle('settings') }} button>
                                 <ListItemIcon>
                                     <TuneIcon />
                                 </ListItemIcon>
-                                <ListItemText primary="Settings" secondary="Memory options and more" />
+                                <ListItemText primary={i18n.__("Settings")} secondary={i18n.__("Memory options and more")} />
                             </ListItem>
                             <Divider />
                             <ListItem selected={this.props.selected === 'about'} onClick={() => { this.changeSectionHandle('about') }} button>
                                 <ListItemIcon>
                                     <GitHubIcon />
                                 </ListItemIcon>
-                                <ListItemText primary="GitHub" secondary="Open source projects" />
+                                <ListItemText primary={i18n.__("GitHub")} secondary={i18n.__("Open source projects")} />
                             </ListItem>
                         </List>
                     </Grid>

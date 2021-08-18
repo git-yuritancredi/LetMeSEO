@@ -42,7 +42,7 @@ class LetMeSeo {
                 ]
             }
         ];
-        Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+        //Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 
         let dbPath = this.path.join(__dirname, '/letmeseo.db');
         if(process.env.DEVELOPMENT !== '1'){
@@ -68,16 +68,26 @@ class LetMeSeo {
         let configCollection = this.db.getCollection('config');
         if (configCollection === null) {
             configCollection = this.db.addCollection('config');
+        }
+        if(!configCollection.findOne({key: 'darkMode'})){
             configCollection.insert({
                 key: 'darkMode',
                 value: this.nativeTheme.shouldUseDarkColors
             });
+        }
+        if(!configCollection.findOne({key: 'saveHistory'})){
             configCollection.insert({
                 key: 'saveHistory',
                 value: true
             });
-            this.db.saveDatabase();
         }
+        if(!configCollection.findOne({key: 'language'})){
+            configCollection.insert({
+                key: 'language',
+                value: 'en'
+            });
+        }
+        this.db.saveDatabase();
     }
 
     showMainWindow() {

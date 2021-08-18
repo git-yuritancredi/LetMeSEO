@@ -3,6 +3,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import WarningIcon from "@material-ui/icons/Warning";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
+import {i18n} from "../../language";
 
 export default class Title extends React.Component
 {
@@ -28,7 +29,7 @@ export default class Title extends React.Component
                                     <WarningIcon color="secondary" /> :
                                     <ErrorIcon color="disabled" />
                             )
-                    } Title
+                    } {i18n.__("Title")}
                     {
                         this.validTitle() === 2 ?
                             <Badge badgeContent="+1" color="primary" /> :
@@ -45,10 +46,10 @@ export default class Title extends React.Component
                 }
                 <Typography variant="subtitle1" className="description-tag" color="textSecondary">
                     {
-                        this.validTitle() === 2 ? "The meta title tag is correct." : (
+                        this.validTitle() === 2 ? i18n.__("The meta title tag is correct.") : (
                             this.validTitle() === 1 ?
-                                "The meta title tag is greater than 60 characters, some search engines such as Google show only 55/60 characters." :
-                                "The meta title tag was not found, is very important to implement it in your site because it is how searches see your page in search engines such as Google."
+                                i18n.__("The meta title tag is greater than 60 characters, some search engines such as Google show only 55/60 characters.") :
+                                i18n.__("The meta title tag was not found, is very important to implement it in your site because it is how searches see your page in search engines such as Google.")
                         )
                     }
                 </Typography>

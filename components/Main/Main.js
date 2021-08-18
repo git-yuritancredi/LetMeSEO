@@ -9,6 +9,7 @@ import AppMenu from "../AppMenu/AppMenu";
 import About from "../About/About";
 import History from "../History/History";
 import Settings from "../Settings/Settings";
+import {i18n} from '../language';
 
 export default class Main extends React.Component
 {
@@ -114,12 +115,12 @@ export default class Main extends React.Component
             if(value){
                 this.setState({
                     showSuccess: true,
-                    successMessage: "Configuration saved."
+                    successMessage: i18n.__("Configuration saved.")
                 });
             }else{
                 this.setState({
                     showError: true,
-                    errorMessage: "Unable to save configuration."
+                    errorMessage: i18n.__("Unable to save configuration.")
                 });
             }
         });
@@ -138,6 +139,15 @@ export default class Main extends React.Component
         });
 
         electron.ipcRenderer.send('get-history');
+
+        let configs = electron.ipcRenderer.sendSync('get-config');
+        if(configs.length > 0){
+            configs.forEach((config) => {
+                if(config.key === 'language') {
+                    i18n.setLocale(config.value);
+                }
+            });
+        }
     }
 
     themeModeHandler(mode){

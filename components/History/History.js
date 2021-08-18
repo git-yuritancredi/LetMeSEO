@@ -35,13 +35,14 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import BackspaceIcon from '@material-ui/icons/Backspace';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import CloseIcon from '@material-ui/icons/Close';
+import {i18n} from "../language";
 
 export default class History extends React.Component
 {
     constructor(props) {
         super(props);
         this.state = {
-            analyzedSites: 0,
+            analyzedSites: props.data.length,
             confirmOpened: false,
             infoOpened: false,
             data: props.data,
@@ -52,9 +53,9 @@ export default class History extends React.Component
             currentPage: 0,
             setAnalysisData: props.keepDataHandler,
             headCells: [
-                { id: 'site', numeric: false, disablePadding: true, label: 'Site URL' },
-                { id: 'point', numeric: true, disablePadding: false, label: 'LetMeScore' },
-                { id: 'actions', numeric: false, disablePadding: false, label: 'Actions' },
+                { id: 'site', numeric: false, disablePadding: true, label: i18n.__('Site URL') },
+                { id: 'point', numeric: true, disablePadding: false, label: i18n.__('LetMeScore') },
+                { id: 'actions', numeric: false, disablePadding: false, label: i18n.__('Actions') },
             ]
         };
 
@@ -174,21 +175,21 @@ export default class History extends React.Component
                 <Box className="heading">
                     <Grid alignItems="center" container>
                         <Grid item xs={9}>
-                            <Typography variant="h3" color="textPrimary">History</Typography>
-                            <Typography variant="subtitle1" color="textSecondary">You currently has analyzed {this.state.analyzedSites} sites</Typography>
+                            <Typography variant="h3" color="textPrimary">{i18n.__("History")}</Typography>
+                            <Typography variant="subtitle1" color="textSecondary">{i18n.__("You currently has analyzed %s sites", this.state.analyzedSites)}</Typography>
                         </Grid>
                         <Grid item xs={3}>
-                            <Button variant="contained" color="primary" size="large" onClick={this.confirmHandle.bind(this)} fullWidth disableElevation>CLEAR HISTORY</Button>
+                            <Button variant="contained" color="primary" size="large" onClick={this.confirmHandle.bind(this)} fullWidth disableElevation>{i18n.__("CLEAR HISTORY")}</Button>
                         </Grid>
                     </Grid>
                 </Box>
                 <Grid className="container" container>
                     <Grid item xs={12}>
                         <FormControl size="small" fullWidth variant="outlined">
-                            <InputLabel htmlFor="standard-basic">Search...</InputLabel>
+                            <InputLabel htmlFor="standard-basic">{i18n.__("Search...")}</InputLabel>
                             <OutlinedInput
                                 id="standard-basic"
-                                label="Search..."
+                                label={i18n.__("Search...")}
                                 onChange={this.searchHandler.bind(this)}
                                 variant="outlined"
                                 value={this.state.searchString}
@@ -255,7 +256,7 @@ export default class History extends React.Component
                                         <>
                                             <TableRow hover role="checkbox" tabIndex={-1} key="nodata-row">
                                                 <TableCell colSpan={3} align="center">
-                                                    History is empty
+                                                    {i18n.__("History is empty")}
                                                 </TableCell>
                                             </TableRow>
                                         </>
@@ -266,10 +267,12 @@ export default class History extends React.Component
                         <TablePagination
                             rowsPerPageOptions={[20, 25, 50]}
                             component="div"
+                            labelRowsPerPage={i18n.__("Rows per page:")}
+                            labelDisplayedRows={(data) => i18n.__("%s - %s of %s", data.from, data.to, data.count)}
                             count={this.state.data.length}
                             rowsPerPage={this.state.itemsPerPage}
                             page={this.state.currentPage}
-                            onChangePage={this.pageHandler.bind(this)}
+                            onPageChange={this.pageHandler.bind(this)}
                             onChangeRowsPerPage={this.paginationHandler.bind(this)}
                         />
                     </Grid>
@@ -279,18 +282,18 @@ export default class History extends React.Component
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">Are you shure to delete all history?</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{i18n.__("Are you shure to delete all history?")}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            If you proceed you lost all data and analysis of the LetMeScore, the option is irreversible.
+                            {i18n.__("If you proceed you lost all data and analysis of the LetMeScore, the option is irreversible.")}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.closeHandle.bind(this)} variant="outlined" color="default">
-                            CANCEL
+                            {i18n.__("CANCEL")}
                         </Button>
                         <Button onClick={this.proceedClean.bind(this)} variant="outlined" className="danger-btn" autoFocus>
-                            PROCEED
+                            {i18n.__("PROCEED")}
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -306,46 +309,46 @@ export default class History extends React.Component
                         <IconButton edge="start" color="default" onClick={this.closeInfoHandler.bind(this)}>
                             <CloseIcon />
                         </IconButton>
-                        Search instructions
+                        {i18n.__("Search instructions")}
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            <Typography variant="subtitle1" color="textPrimary">Simple site search</Typography>
+                            <Typography variant="subtitle1" color="textPrimary">{i18n.__("Simple site search")}</Typography>
                             <Divider variant="fullWidth" />
-                            <Typography variant="body2">You just simply search site url in the bar.</Typography>
+                            <Typography variant="body2">{i18n.__("You just simply search site url in the bar.")}</Typography>
                             <br />
-                            <Typography variant="subtitle1" color="textPrimary">Advanced search</Typography>
+                            <Typography variant="subtitle1" color="textPrimary">{i18n.__("Advanced search")}</Typography>
                             <Divider variant="fullWidth" />
-                            <Typography variant="body2">You can search by LetMeScore using this syntax:</Typography>
+                            <Typography variant="body2">{i18n.__("You can search by LetMeScore using this syntax:")}</Typography>
                             <List dense>
                                 <ListItem>
                                     <ListItemText>
-                                        <code>points:eq=<strong>x</strong></code> indicate that LetMeScore must be equal to value specified in x
+                                        <code>points:eq=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be equal to value specified in x")}
                                     </ListItemText>
                                 </ListItem>
                                 <ListItem>
                                     <ListItemText>
-                                        <code>points:gt=<strong>x</strong></code> indicate that LetMeScore must be grater than value specified in x
+                                        <code>points:gt=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be grater than value specified in x")}
                                     </ListItemText>
                                 </ListItem>
                                 <ListItem>
                                     <ListItemText>
-                                        <code>points:gte=<strong>x</strong></code> indicate that LetMeScore must be grater than equal to value specified in x
+                                        <code>points:gte=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be grater than equal to value specified in x")}
                                     </ListItemText>
                                 </ListItem>
                                 <ListItem>
                                     <ListItemText>
-                                        <code>points:lt=<strong>x</strong></code> indicate that LetMeScore must be lower than value specified in x
+                                        <code>points:lt=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be lower than value specified in x")}
                                     </ListItemText>
                                 </ListItem>
                                 <ListItem>
                                     <ListItemText>
-                                        <code>points:lte=<strong>x</strong></code> indicate that LetMeScore must be lower than equal value specified in x
+                                        <code>points:lte=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be lower than equal value specified in x")}
                                     </ListItemText>
                                 </ListItem>
                                 <ListItem>
                                     <ListItemText>
-                                        <code>points:btw=<strong>x</strong>=<strong>y</strong></code> indicate that LetMeScore must be between value specified in x and y
+                                        <code>points:btw=<strong>x</strong>=<strong>y</strong></code> {i18n.__("indicate that LetMeScore must be between value specified in x and y")}
                                     </ListItemText>
                                 </ListItem>
                             </List>
@@ -353,7 +356,7 @@ export default class History extends React.Component
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.closeInfoHandler.bind(this)} autoFocus>
-                            OK
+                            {i18n.__("OK")}
                         </Button>
                     </DialogActions>
                 </Dialog>
