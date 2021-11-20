@@ -35,23 +35,24 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import BackspaceIcon from '@material-ui/icons/Backspace';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import CloseIcon from '@material-ui/icons/Close';
+import {connect} from 'react-redux';
 import {i18n} from "../language";
+import {setHistory} from "../slices/historySlice";
+import {setStoredAnalysis} from '../slices/appSlice';
+import {mapState} from "../store";
 
-export default class History extends React.Component
+class History extends React.Component
 {
     constructor(props) {
         super(props);
         this.state = {
-            analyzedSites: props.data.length,
             confirmOpened: false,
             infoOpened: false,
-            data: props.data,
             originalData: [],
             searchString: "",
             itemsPerPage: 20,
             openedRows: [],
             currentPage: 0,
-            setAnalysisData: props.keepDataHandler,
             headCells: [
                 { id: 'site', numeric: false, disablePadding: true, label: i18n.__('Site URL') },
                 { id: 'point', numeric: true, disablePadding: false, label: i18n.__('LetMeScore') },
@@ -60,9 +61,7 @@ export default class History extends React.Component
         };
 
         electron.ipcRenderer.on('history-update', (event, data) => {
-            this.setState({
-                data: data
-            });
+            this.props.dispatch(setHistory(data));
         });
     }
 
@@ -100,12 +99,12 @@ export default class History extends React.Component
     }
 
     doAnalysis(row){
-        this.state.setAnalysisData('analyze', row);
+        this.props.dispatch(setStoredAnalysis(row))
     }
 
     searchHandler(e){
         let searchString = e.target.value;
-        let toMap = this.state.data;
+        let toMap = this.props.history.items;
         let mapped = [];
         if(this.state.originalData.length > 0){
             toMap = this.state.originalData;
@@ -176,7 +175,7 @@ export default class History extends React.Component
                     <Grid alignItems="center" container>
                         <Grid item xs={9}>
                             <Typography variant="h3" color="textPrimary">{i18n.__("History")}</Typography>
-                            <Typography variant="subtitle1" color="textSecondary">{i18n.__("You currently has analyzed %s sites", this.state.analyzedSites)}</Typography>
+                            <Typography variant="subtitle1" color="textSecondary">{i18n.__("You currently has analyzed %s sites", this.props.history.items.length)}</Typography>
                         </Grid>
                         <Grid item xs={3}>
                             <Button variant="contained" color="primary" size="large" onClick={this.confirmHandle.bind(this)} fullWidth disableElevation>{i18n.__("CLEAR HISTORY")}</Button>
@@ -224,8 +223,8 @@ export default class History extends React.Component
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.state.data.length ?
-                                        this.state.data.slice((this.state.currentPage * this.state.itemsPerPage), ((this.state.currentPage+1) * this.state.itemsPerPage))
+                                    {this.props.history.items.length ?
+                                        this.props.history.items.slice((this.state.currentPage * this.state.itemsPerPage), ((this.state.currentPage+1) * this.state.itemsPerPage))
                                             .map((row) => {
                                         return (
                                             <TableRow hover role="checkbox" tabIndex={-1} key={row.analyzedUrl+"-row"}>
@@ -269,7 +268,7 @@ export default class History extends React.Component
                             component="div"
                             labelRowsPerPage={i18n.__("Rows per page:")}
                             labelDisplayedRows={(data) => i18n.__("%s - %s of %s", data.from, data.to, data.count)}
-                            count={this.state.data.length}
+                            count={this.props.history.items.length}
                             rowsPerPage={this.state.itemsPerPage}
                             page={this.state.currentPage}
                             onPageChange={this.pageHandler.bind(this)}
@@ -364,3 +363,5 @@ export default class History extends React.Component
         );
     }
 }
+
+export default connect(mapState)(History);
