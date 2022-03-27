@@ -48,7 +48,7 @@ class History extends React.Component
         this.state = {
             confirmOpened: false,
             infoOpened: false,
-            originalData: [],
+            originalData: props.history.items,
             searchString: "",
             itemsPerPage: 20,
             openedRows: [],
@@ -142,10 +142,15 @@ class History extends React.Component
                 return item.analyzedUrl.indexOf(searchString) > -1;
             });
         }
-        this.setState((previousState) => ({
-            data: mapped,
-            searchString: searchString,
-            originalData: previousState.originalData.length === 0 ? previousState.data : previousState.originalData
+
+        if (searchString.length > 0) {
+            this.props.dispatch(setHistory(mapped));
+        } else {
+            this.props.dispatch(setHistory(this.state.originalData));
+        }
+
+        this.setState(() => ({
+            searchString: searchString
         }));
     }
 
@@ -162,8 +167,8 @@ class History extends React.Component
     }
 
     clearSearchHandle(){
-        this.setState((previousState) => ({
-            data: previousState.originalData,
+        this.props.dispatch(setHistory(this.state.originalData));
+        this.setState(() => ({
             searchString: ""
         }));
     }
