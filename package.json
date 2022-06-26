@@ -60,8 +60,8 @@
     "@babel/core": "^7.17.8",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
-    "electron": "^17.2.0",
-    "electron-builder": "^22.14.13",
+    "electron": "^19.0.6",
+    "electron-builder": "^23.1.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
@@ -74,11 +74,11 @@
     "@reduxjs/toolkit": "^1.8.0",
     "fetch": "^1.1.0",
     "he": "^1.2.0",
-    "i18n": "^0.14.2",
+    "i18n": "^0.15.0",
     "lokijs": "^1.5.12",
     "node-html-parser": "^5.3.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-redux": "^7.2.4"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.2"
   }
 }

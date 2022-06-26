@@ -31,11 +31,12 @@ function buildJs(){
 
 function cleanBuild(done){
     if(fs.existsSync(__dirname+ "/app")){
-        fs.rmdirSync(__dirname+ "/app", {
+        fs.rm(__dirname+ "/app", {
             recursive: true
+        }, () => {
+            done();
         });
     }
-    done();
 }
 
 async function start() {
