@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@material-ui/core";
+import { Box } from "@mui/material";
 import Robots from './Boxes/Robots';
 import Canonical from './Boxes/Canonical';
 import Viewport from './Boxes/Viewport';

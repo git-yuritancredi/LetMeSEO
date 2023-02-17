@@ -1,5 +1,5 @@
-import {Box, Button, Divider, Grid, Typography} from "@material-ui/core";
-import TwitterIcon from "@material-ui/icons/Twitter";
+import {Box, Button, Divider, Grid, Typography} from "@mui/material";
+import TwitterIcon from "@mui/icons-material/Twitter";
 import React from "react";
 import electron from "electron";
 import {i18n} from "../../language";

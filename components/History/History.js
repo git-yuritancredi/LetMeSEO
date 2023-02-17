@@ -25,16 +25,16 @@ import {
     List,
     ListItem,
     ListItemText,
-    Divider
-} from "@material-ui/core";
-import Rating from '@material-ui/lab/Rating';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CallMissedOutgoingIcon from '@material-ui/icons/CallMissedOutgoing';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import BackspaceIcon from '@material-ui/icons/Backspace';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import CloseIcon from '@material-ui/icons/Close';
+    Divider,
+    Rating
+} from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import CallMissedOutgoingIcon from '@mui/icons-material/CallMissedOutgoing';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import BackspaceIcon from '@mui/icons-material/Backspace';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import CloseIcon from '@mui/icons-material/Close';
 import {connect} from 'react-redux';
 import {i18n} from "../language";
 import {setHistory} from "../slices/historySlice";
@@ -203,7 +203,7 @@ class History extends React.Component
                                             aria-label="Clear search"
                                             onClick={this.state.searchString ? this.clearSearchHandle.bind(this) : this.infoHandler.bind(this)}
                                         >
-                                            {this.state.searchString ? <BackspaceIcon/> : <HelpOutlineIcon onClick={this.infoHandler.bind(this)} />}
+                                            {this.state.searchString ? <BackspaceIcon/> : <HelpOutlineIcon />}
                                         </IconButton>
                                     </InputAdornment>
                                 }
@@ -277,7 +277,7 @@ class History extends React.Component
                             rowsPerPage={this.state.itemsPerPage}
                             page={this.state.currentPage}
                             onPageChange={this.pageHandler.bind(this)}
-                            onChangeRowsPerPage={this.paginationHandler.bind(this)}
+                            onRowsPerPageChange={this.paginationHandler.bind(this)}
                         />
                     </Grid>
                 </Grid>
@@ -293,10 +293,10 @@ class History extends React.Component
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.closeHandle.bind(this)} variant="outlined" color="default">
+                        <Button onClick={this.closeHandle.bind(this)} variant="outlined">
                             {i18n.__("CANCEL")}
                         </Button>
-                        <Button onClick={this.proceedClean.bind(this)} variant="outlined" className="danger-btn" autoFocus>
+                        <Button onClick={this.proceedClean.bind(this)} variant="outlined" className="danger-btn" color="error" autoFocus>
                             {i18n.__("PROCEED")}
                         </Button>
                     </DialogActions>
@@ -315,48 +315,46 @@ class History extends React.Component
                         </IconButton>
                         {i18n.__("Search instructions")}
                     </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            <Typography variant="subtitle1" color="textPrimary">{i18n.__("Simple site search")}</Typography>
-                            <Divider variant="fullWidth" />
-                            <Typography variant="body2">{i18n.__("You just simply search site url in the bar.")}</Typography>
-                            <br />
-                            <Typography variant="subtitle1" color="textPrimary">{i18n.__("Advanced search")}</Typography>
-                            <Divider variant="fullWidth" />
-                            <Typography variant="body2">{i18n.__("You can search by LetMeScore using this syntax:")}</Typography>
-                            <List dense>
-                                <ListItem>
-                                    <ListItemText>
-                                        <code>points:eq=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be equal to value specified in x")}
-                                    </ListItemText>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText>
-                                        <code>points:gt=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be grater than value specified in x")}
-                                    </ListItemText>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText>
-                                        <code>points:gte=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be grater than equal to value specified in x")}
-                                    </ListItemText>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText>
-                                        <code>points:lt=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be lower than value specified in x")}
-                                    </ListItemText>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText>
-                                        <code>points:lte=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be lower than equal value specified in x")}
-                                    </ListItemText>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText>
-                                        <code>points:btw=<strong>x</strong>=<strong>y</strong></code> {i18n.__("indicate that LetMeScore must be between value specified in x and y")}
-                                    </ListItemText>
-                                </ListItem>
-                            </List>
-                        </DialogContentText>
+                    <DialogContent id="alert-dialog-description">
+                        <Typography variant="subtitle1" color="textPrimary">{i18n.__("Simple site search")}</Typography>
+                        <Divider variant="fullWidth" />
+                        <Typography variant="body2" color="textSecondary">{i18n.__("You just simply search site url in the bar.")}</Typography>
+                        <br />
+                        <Typography variant="subtitle1" color="textPrimary">{i18n.__("Advanced search")}</Typography>
+                        <Divider variant="fullWidth" />
+                        <Typography variant="body2" color="textSecondary">{i18n.__("You can search by LetMeScore using this syntax:")}</Typography>
+                        <List dense>
+                            <ListItem>
+                                <ListItemText>
+                                    <code>points:eq=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be equal to value specified in x")}
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText>
+                                    <code>points:gt=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be grater than value specified in x")}
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText>
+                                    <code>points:gte=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be grater than equal to value specified in x")}
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText>
+                                    <code>points:lt=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be lower than value specified in x")}
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText>
+                                    <code>points:lte=<strong>x</strong></code> {i18n.__("indicate that LetMeScore must be lower than equal value specified in x")}
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText>
+                                    <code>points:btw=<strong>x</strong>=<strong>y</strong></code> {i18n.__("indicate that LetMeScore must be between value specified in x and y")}
+                                </ListItemText>
+                            </ListItem>
+                        </List>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.closeInfoHandler.bind(this)} autoFocus>

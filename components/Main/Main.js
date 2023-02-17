@@ -1,6 +1,5 @@
 import React from 'react';
-import { Grid, Snackbar, ThemeProvider, createTheme } from "@material-ui/core";
-import { Alert } from '@material-ui/lab';
+import { Grid, Snackbar, Alert, ThemeProvider, createTheme } from "@mui/material";
 import electron from 'electron';
 import {connect} from 'react-redux';
 
@@ -42,80 +41,96 @@ class Main extends React.Component
 
         this.defaultTheme = createTheme({
             palette: {
-                type: 'light',
+                mode: 'light',
                 primary: {
-                    main: '#424C55',
+                    main: '#424C55'
                 },
                 secondary: {
-                    main: '#ffd231',
+                    main: '#ffd231'
                 },
             },
-            overrides: {
+            components: {
                 MuiFormControlLabel: {
-                    label: {
-                        marginLeft: 10,
-                        fontSize: 14
-                    },
-                },
-                MuiSwitch: {
-                    root: {
-                        marginLeft: 10,
+                    styleOverrides: {
+                        label: {
+                            marginLeft: 10,
+                            fontSize: 14
+                        }
                     }
                 },
-                MuiListItem: {
-                    root: {
-                        "&$selected": {
-                            backgroundColor: "#D3D0CB",
-                        },
-                    },
+                MuiSwitch: {
+                    styleOverrides: {
+                        root: {
+                            marginLeft: 10
+                        }
+                    }
+                },
+                MuiListItemButton: {
+                    styleOverrides: {
+                        root: {
+                            "&$selected": {
+                                backgroundColor: "#D3D0CB"
+                            }
+                        }
+                    }
                 },
                 MuiTypography: {
-                    root: {
-                        "&$colorTextPrimary": {
-                            color: "#424C55",
-                        },
-                        "&$colorTextSecondary": {
-                            color: "#54616c",
+                    styleOverrides: {
+                        root: {
+                            "&$colorTextPrimary": {
+                                color: "#424C55"
+                            },
+                            "&$colorTextSecondary": {
+                                color: "#54616c"
+                            }
                         }
-                    },
-                },
-            },
+                    }
+                }
+            }
         });
 
         this.darkTheme = createTheme({
             palette: {
-                type: 'dark',
+                mode: 'dark',
                 primary: {
-                    main: '#49BEAA',
+                    main: '#49BEAA'
                 },
                 secondary: {
-                    main: '#ffd231',
+                    main: '#ffd231'
                 }
             },
-            overrides: {
-                MuiButton: {
-                    label: {
-                        color: "#FFFFFF",
+            components: {
+                MuiListItemButton: {
+                    styleOverrides: {
+                        label: {
+                            color: "#FFFFFF"
+                        }
                     }
                 },
                 MuiSwitch: {
-                    root: {
-                        marginLeft: 10,
+                    styleOverrides: {
+                        root: {
+                            marginLeft: 10
+                        }
                     }
                 },
                 MuiFormControlLabel: {
-                    label: {
-                        color: '#ffffffb3',
-                        marginLeft: 10,
-                        fontSize: 14
+                    styleOverrides: {
+                        label: {
+                            color: '#ffffffb3',
+                            marginLeft: 10,
+                            fontSize: 14
+                        }
                     }
                 },
                 MuiListItemText: {
-                    primary: {
-                        color: '#FFFFFF',
+                    styleOverrides: {
+                        primary: {
+                            color: '#FFFFFF'
+                        }
                     }
                 }
-            },
+            }
         });
 
         electron.ipcRenderer.on('save-done', (event, value) => {

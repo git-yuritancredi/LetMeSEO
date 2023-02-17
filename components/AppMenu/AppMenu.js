@@ -1,9 +1,19 @@
 import React from "react";
-import { List, ListItem, Divider, Chip, Avatar, Grid, Badge, ListItemIcon, ListItemText } from "@material-ui/core";
-import BarChartIcon from '@material-ui/icons/BarChart';
-import HistoryIcon from '@material-ui/icons/History';
-import TuneIcon from '@material-ui/icons/Tune';
-import GitHubIcon from '@material-ui/icons/GitHub';
+import {
+    List,
+    Divider,
+    Chip,
+    Avatar,
+    Grid,
+    Badge,
+    ListItemIcon,
+    ListItemText,
+    ListItemButton
+} from "@mui/material";
+import BarChartIcon from '@mui/icons-material/BarChart';
+import HistoryIcon from '@mui/icons-material/History';
+import TuneIcon from '@mui/icons-material/Tune';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import electron from 'electron';
 import {connect} from "react-redux";
 import {i18n} from "../language";
@@ -27,7 +37,7 @@ class AppMenu extends React.Component
                 <Grid direction="column" justifyContent="space-between" alignItems="stretch" className="menu-grid" container>
                     <Grid item>
                         <List component="nav" aria-label="main mailbox folders">
-                            <ListItem selected={this.props.navigation.section === 'analyze'} onClick={() => { this.changeSectionHandle('analyze') }} button>
+                            <ListItemButton selected={this.props.navigation.section === 'analyze'} onClick={() => { this.changeSectionHandle('analyze') }}>
                                 <ListItemIcon>
                                     { this.props.app.storedAnalysis !== null && this.props.navigation.section !== 'analyze' ?
                                         <Badge color="primary" variant="dot">
@@ -37,28 +47,28 @@ class AppMenu extends React.Component
                                     }
                                 </ListItemIcon>
                                 <ListItemText primary={i18n.__("Analyze")} secondary={i18n.__("Analyze site SEO")} />
-                            </ListItem>
+                            </ListItemButton>
                             <Divider />
-                            <ListItem selected={this.props.navigation.section === 'history'} onClick={() => { this.changeSectionHandle('history') }} button>
+                            <ListItemButton selected={this.props.navigation.section === 'history'} onClick={() => { this.changeSectionHandle('history') }}>
                                 <ListItemIcon>
                                     <HistoryIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={i18n.__("History")} secondary={i18n.__("You has analyzed %s sites", this.props.history.items.length)} />
-                            </ListItem>
+                            </ListItemButton>
                             <Divider />
-                            <ListItem selected={this.props.navigation.section === 'settings'} onClick={() => { this.changeSectionHandle('settings') }} button>
+                            <ListItemButton selected={this.props.navigation.section === 'settings'} onClick={() => { this.changeSectionHandle('settings') }}>
                                 <ListItemIcon>
                                     <TuneIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={i18n.__("Settings")} secondary={i18n.__("Memory options and more")} />
-                            </ListItem>
+                            </ListItemButton>
                             <Divider />
-                            <ListItem selected={this.props.navigation.section === 'about'} onClick={() => { this.changeSectionHandle('about') }} button>
+                            <ListItemButton selected={this.props.navigation.section === 'about'} onClick={() => { this.changeSectionHandle('about') }}>
                                 <ListItemIcon>
                                     <GitHubIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={i18n.__("GitHub")} secondary={i18n.__("Open source projects")} />
-                            </ListItem>
+                            </ListItemButton>
                         </List>
                     </Grid>
                     <Grid item className="bottom-picker">

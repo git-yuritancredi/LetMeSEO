@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Divider } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
+import { Box, Divider, Skeleton } from "@mui/material";
 
 export default class Placeholder extends React.Component
 {
@@ -9,16 +8,16 @@ export default class Placeholder extends React.Component
 
         let items = [];
         items.push(<Skeleton animation="wave" key="0" className="first-line" variant="rect" width={200} height={35} />)
-        items.push(<Divider variant="fullWidth" />);
+        items.push(<Divider key="0.1" variant="fullWidth" />);
         for(let i = 1; i <= 10; i++){
             items.push(<Skeleton animation="wave" key={i} variant="rect" width={this.getRandom()} height={15} />);
         }
         items.push(<br key="11"/>);
         items.push(<br key="12"/>);
         items.push(<Skeleton animation="wave" key="13" className="first-line" variant="rect" width={200} height={35} />)
-        items.push(<Divider variant="fullWidth" />);
+        items.push(<Divider key="14" variant="fullWidth" />);
         for(let j = 0; j < 10; j++){
-            items.push(<Skeleton animation="wave" key={14+j} variant="rect" width={this.getRandom()} height={15} />);
+            items.push(<Skeleton animation="wave" key={15+j} variant="rect" width={this.getRandom()} height={15} />);
         }
 
         this.state = {

@@ -1,5 +1,5 @@
-import {Box, Button, Divider, Grid, Typography} from "@material-ui/core";
-import FacebookIcon from "@material-ui/icons/Facebook";
+import {Box, Button, Divider, Grid, Typography} from "@mui/material";
+import FacebookIcon from "@mui/icons-material/Facebook";
 import React from "react";
 import electron from "electron";
 import {i18n} from '../../language';
