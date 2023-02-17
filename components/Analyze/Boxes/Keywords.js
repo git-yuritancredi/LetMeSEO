@@ -1,5 +1,5 @@
-import {Box, Divider, Typography} from "@material-ui/core";
-import InfoIcon from "@material-ui/icons/Info";
+import {Box, Divider, Typography} from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 import React from "react";
 import {i18n} from "../../language";
 

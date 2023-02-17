@@ -1,6 +1,6 @@
 import React from "react";
-import {Grid, Avatar, Box, Typography, Chip} from "@material-ui/core";
-import GitHubIcon from '@material-ui/icons/GitHub';
+import {Grid, Avatar, Box, Typography, Chip} from "@mui/material";
+import GitHubIcon from '@mui/icons-material/GitHub';
 import electron from "electron";
 import {i18n} from '../language';
 

@@ -1,14 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import Main from './Main/Main.js';
 import {Provider} from 'react-redux';
 import store from './store';
 
 window.onload = () => {
-    ReactDOM.render(
-        <Provider store={store}>
-            <Main />
-        </Provider>,
-        document.getElementById('main-dom')
-    );
+    const root = createRoot(document.getElementById('main-dom'));
+    root.render(<Provider store={store}><Main /></Provider>)
 };

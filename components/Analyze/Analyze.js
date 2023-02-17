@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Box, Typography, Grid, TextField} from '@material-ui/core';
+import {Button, Box, Typography, Grid, TextField} from '@mui/material';
 import Placeholder from './Placeholder';
 import Analysis from "./Analysis";
 import electron from "electron";

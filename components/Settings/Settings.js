@@ -10,7 +10,7 @@ import {
     FormControlLabel,
     Select,
     MenuItem
-} from "@material-ui/core";
+} from "@mui/material";
 import {connect} from "react-redux";
 import {i18n} from '../language';
 import {saveConfig, setConfig} from "../slices/configSlice";

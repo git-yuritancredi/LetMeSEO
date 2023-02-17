@@ -1,8 +1,8 @@
-import {Badge, Box, Divider, Typography} from "@material-ui/core";
+import {Badge, Box, Divider, Typography} from "@mui/material";
 import React from "react";
-import ErrorIcon from "@material-ui/icons/Error";
-import WarningIcon from "@material-ui/icons/Warning";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {i18n} from '../../language';
 
 export default class Headers extends React.Component

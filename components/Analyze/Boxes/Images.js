@@ -1,6 +1,6 @@
-import {Badge, Box, Divider, Typography} from "@material-ui/core";
-import WarningIcon from "@material-ui/icons/Warning";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import {Badge, Box, Divider, Typography} from "@mui/material";
+import WarningIcon from "@mui/icons-material/Warning";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import React from "react";
 import {i18n} from "../../language";
 
