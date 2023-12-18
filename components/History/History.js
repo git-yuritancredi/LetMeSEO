@@ -1,5 +1,8 @@
 import React from "react";
 import electron from "electron";
+import {i18n} from "../language";
+import {mapState} from "../store";
+import {connect} from 'react-redux';
 import {
     Box,
     Button,
@@ -28,21 +31,17 @@ import {
     Divider,
     Rating
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
-import CallMissedOutgoingIcon from '@mui/icons-material/CallMissedOutgoing';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import BackspaceIcon from '@mui/icons-material/Backspace';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import CloseIcon from '@mui/icons-material/Close';
-import {connect} from 'react-redux';
-import {i18n} from "../language";
 import {setHistory} from "../slices/historySlice";
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {setStoredAnalysis} from '../slices/appSlice';
-import {mapState} from "../store";
+import BackspaceIcon from '@mui/icons-material/Backspace';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import CallMissedOutgoingIcon from '@mui/icons-material/CallMissedOutgoing';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
-class History extends React.Component
-{
+class History extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -54,9 +53,9 @@ class History extends React.Component
             openedRows: [],
             currentPage: 0,
             headCells: [
-                { id: 'site', numeric: false, disablePadding: true, label: i18n.__('Site URL') },
-                { id: 'point', numeric: true, disablePadding: false, label: i18n.__('LetMeScore') },
-                { id: 'actions', numeric: false, disablePadding: false, label: i18n.__('Actions') },
+                {id: 'site', numeric: false, disablePadding: true, label: i18n.__('Site URL')},
+                {id: 'point', numeric: true, disablePadding: false, label: i18n.__('LetMeScore')},
+                {id: 'actions', numeric: false, disablePadding: false, label: i18n.__('Actions')},
             ]
         };
 
@@ -65,52 +64,52 @@ class History extends React.Component
         });
     }
 
-    confirmHandle(){
+    confirmHandle() {
         this.setState({
             confirmOpened: true
         });
     }
 
-    proceedClean(){
+    proceedClean() {
         electron.ipcRenderer.send('clean-history');
         this.closeHandle();
     }
 
-    closeHandle(){
+    closeHandle() {
         this.setState({
             confirmOpened: false
         });
     }
 
-    pageHandler(e, newPage){
+    pageHandler(e, newPage) {
         this.setState({
             currentPage: newPage
         });
     }
 
-    paginationHandler(e){
+    paginationHandler(e) {
         this.setState({
             itemsPerPage: e.target.value
         })
     }
 
-    deleteItem(key){
+    deleteItem(key) {
         electron.ipcRenderer.send('delete-history', {key: key});
     }
 
-    doAnalysis(row){
+    doAnalysis(row) {
         this.props.dispatch(setStoredAnalysis(row))
     }
 
-    searchHandler(e){
+    searchHandler(e) {
         let searchString = e.target.value;
         let toMap = this.props.history.items;
         let mapped = [];
-        if(this.state.originalData.length > 0){
+        if (this.state.originalData.length > 0) {
             toMap = this.state.originalData;
         }
 
-        if(searchString.indexOf('points:') > -1){
+        if (searchString.indexOf('points:') > -1) {
             let operator = searchString.split(':');
             operator = operator[1];
             let value = operator.split('=');
@@ -118,26 +117,26 @@ class History extends React.Component
             let valueBtw = parseFloat(value[2]);
             value = parseFloat(value[1]);
 
-            if(!isNaN(value)){
+            if (!isNaN(value)) {
                 mapped = toMap.filter((item) => {
                     if (operator === "eq") {
                         return value === 0 ? item.analysisPoints <= value : item.analysisPoints === value;
-                    }else if(operator === "neq"){
+                    } else if (operator === "neq") {
                         return item.analysisPoints !== value;
-                    }else if(operator === "gt"){
+                    } else if (operator === "gt") {
                         return item.analysisPoints > value;
-                    }else if(operator === "gte"){
+                    } else if (operator === "gte") {
                         return item.analysisPoints >= value;
-                    }else if(operator === "lt"){
+                    } else if (operator === "lt") {
                         return item.analysisPoints < value;
-                    }else if(operator === "lte"){
+                    } else if (operator === "lte") {
                         return item.analysisPoints <= value;
-                    }else if(operator === "btw" && !isNaN(valueBtw)){
+                    } else if (operator === "btw" && !isNaN(valueBtw)) {
                         return item.analysisPoints >= value && item.analysisPoints <= valueBtw;
                     }
                 });
             }
-        }else{
+        } else {
             mapped = toMap.filter((item) => {
                 return item.analyzedUrl.indexOf(searchString) > -1;
             });
@@ -154,19 +153,19 @@ class History extends React.Component
         }));
     }
 
-    infoHandler(){
+    infoHandler() {
         this.setState({
             infoOpened: true
         });
     }
 
-    closeInfoHandler(){
+    closeInfoHandler() {
         this.setState({
             infoOpened: false
         });
     }
 
-    clearSearchHandle(){
+    clearSearchHandle() {
         this.props.dispatch(setHistory(this.state.originalData));
         this.setState(() => ({
             searchString: ""
@@ -180,10 +179,13 @@ class History extends React.Component
                     <Grid alignItems="center" container>
                         <Grid item xs={9}>
                             <Typography variant="h3" color="textPrimary">{i18n.__("History")}</Typography>
-                            <Typography variant="subtitle1" color="textSecondary">{i18n.__("You currently has analyzed %s sites", this.props.history.items.length)}</Typography>
+                            <Typography variant="subtitle1"
+                                        color="textSecondary">{i18n.__("You currently has analyzed %s sites", this.props.history.items.length)}</Typography>
                         </Grid>
                         <Grid item xs={3}>
-                            <Button variant="contained" color="primary" size="large" onClick={this.confirmHandle.bind(this)} fullWidth disableElevation>{i18n.__("CLEAR HISTORY")}</Button>
+                            <Button variant="contained" color="primary" size="large"
+                                    onClick={this.confirmHandle.bind(this)} fullWidth
+                                    disableElevation>{i18n.__("CLEAR HISTORY")}</Button>
                         </Grid>
                     </Grid>
                 </Box>
@@ -203,7 +205,8 @@ class History extends React.Component
                                             aria-label="Clear search"
                                             onClick={this.state.searchString ? this.clearSearchHandle.bind(this) : this.infoHandler.bind(this)}
                                         >
-                                            {this.state.searchString ? <BackspaceIcon/> : <HelpOutlineIcon />}
+                                            {this.state.searchString ? <BackspaceIcon/> :
+                                                <HelpOutlineIcon />}
                                         </IconButton>
                                     </InputAdornment>
                                 }
@@ -229,34 +232,40 @@ class History extends React.Component
                                 </TableHead>
                                 <TableBody>
                                     {this.props.history.items.length ?
-                                        this.props.history.items.slice((this.state.currentPage * this.state.itemsPerPage), ((this.state.currentPage+1) * this.state.itemsPerPage))
+                                        this.props.history.items.slice((this.state.currentPage * this.state.itemsPerPage), ((this.state.currentPage + 1) * this.state.itemsPerPage))
                                             .map((row) => {
-                                        return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.analyzedUrl+"-row"}>
-                                                <TableCell key={row.analyzedUrl} align="center">
-                                                    {row.analyzedUrl}
-                                                </TableCell>
-                                                <TableCell key={row.analyzedUrl+"-"+row.analysisPoints} align="center">
-                                                    <Rating
-                                                        name="hover-feedback"
-                                                        value={row.analysisPoints}
-                                                        precision={0.5}
-                                                        emptyIcon={<CheckCircleOutlineIcon color="disabled"/>}
-                                                        icon={<CheckCircleIcon color="primary" />}
-                                                        readOnly
-                                                    />
-                                                </TableCell>
-                                                <TableCell key={row.analyzedUrl+"-actions"} align="center">
-                                                    <IconButton onClick={() => { this.deleteItem(row.analyzedUrl) }}>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                    <IconButton onClick={() => { this.doAnalysis(row); }}>
-                                                        <CallMissedOutgoingIcon />
-                                                    </IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    }) :
+                                                return (
+                                                    <TableRow hover role="checkbox" tabIndex={-1}
+                                                              key={row.analyzedUrl + "-row"}>
+                                                        <TableCell key={row.analyzedUrl} align="center">
+                                                            {row.analyzedUrl}
+                                                        </TableCell>
+                                                        <TableCell key={row.analyzedUrl + "-" + row.analysisPoints}
+                                                                   align="center">
+                                                            <Rating
+                                                                name="hover-feedback"
+                                                                value={row.analysisPoints}
+                                                                precision={0.5}
+                                                                emptyIcon={<CheckCircleOutlineIcon color="disabled"/>}
+                                                                icon={<CheckCircleIcon color="primary"/>}
+                                                                readOnly
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell key={row.analyzedUrl + "-actions"} align="center">
+                                                            <IconButton onClick={() => {
+                                                                this.deleteItem(row.analyzedUrl)
+                                                            }}>
+                                                                <DeleteIcon/>
+                                                            </IconButton>
+                                                            <IconButton onClick={() => {
+                                                                this.doAnalysis(row);
+                                                            }}>
+                                                                <CallMissedOutgoingIcon/>
+                                                            </IconButton>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                );
+                                            }) :
                                         <>
                                             <TableRow hover role="checkbox" tabIndex={-1} key="nodata-row">
                                                 <TableCell colSpan={3} align="center">
@@ -296,7 +305,8 @@ class History extends React.Component
                         <Button onClick={this.closeHandle.bind(this)} variant="outlined">
                             {i18n.__("CANCEL")}
                         </Button>
-                        <Button onClick={this.proceedClean.bind(this)} variant="outlined" className="danger-btn" color="error" autoFocus>
+                        <Button onClick={this.proceedClean.bind(this)} variant="outlined" className="danger-btn"
+                                autoFocus>
                             {i18n.__("PROCEED")}
                         </Button>
                     </DialogActions>
@@ -311,18 +321,22 @@ class History extends React.Component
                 >
                     <DialogTitle id="alert-dialog-title">
                         <IconButton edge="start" color="default" onClick={this.closeInfoHandler.bind(this)}>
-                            <CloseIcon />
+                            <CloseIcon/>
                         </IconButton>
                         {i18n.__("Search instructions")}
                     </DialogTitle>
                     <DialogContent id="alert-dialog-description">
-                        <Typography variant="subtitle1" color="textPrimary">{i18n.__("Simple site search")}</Typography>
-                        <Divider variant="fullWidth" />
-                        <Typography variant="body2" color="textSecondary">{i18n.__("You just simply search site url in the bar.")}</Typography>
-                        <br />
-                        <Typography variant="subtitle1" color="textPrimary">{i18n.__("Advanced search")}</Typography>
-                        <Divider variant="fullWidth" />
-                        <Typography variant="body2" color="textSecondary">{i18n.__("You can search by LetMeScore using this syntax:")}</Typography>
+                        <Typography variant="subtitle1"
+                                    color="textPrimary">{i18n.__("Simple site search")}</Typography>
+                        <Divider variant="fullWidth"/>
+                        <Typography
+                            variant="body2">{i18n.__("You just simply search site url in the bar.")}</Typography>
+                        <br/>
+                        <Typography variant="subtitle1"
+                                    color="textPrimary">{i18n.__("Advanced search")}</Typography>
+                        <Divider variant="fullWidth"/>
+                        <Typography
+                            variant="body2">{i18n.__("You can search by LetMeScore using this syntax:")}</Typography>
                         <List dense>
                             <ListItem>
                                 <ListItemText>

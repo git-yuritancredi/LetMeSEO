@@ -1,20 +1,19 @@
-import {Badge, Box, Divider, Typography} from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import WarningIcon from "@mui/icons-material/Warning";
-import ErrorIcon from "@mui/icons-material/Error";
 import React from "react";
 import {i18n} from '../../language';
+import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import {Badge, Box, Divider, Typography} from "@mui/material";
 
-export default class Description extends React.Component
-{
-    validDescription(){
-        if(!this.props.description){
+export default class Description extends React.Component {
+    validDescription() {
+        if (!this.props.description) {
             return 0;
         }
-        if(this.props.description.length < 120){
+        if (this.props.description.length < 120) {
             return 1;
         }
-        if(this.props.description.length > 158) {
+        if (this.props.description.length > 158) {
             return 2;
         }
         return 3;
@@ -26,26 +25,27 @@ export default class Description extends React.Component
                 <Typography variant="h5" color="textPrimary" className="title-tag">
                     {
                         this.validDescription() === 3 ?
-                            <CheckCircleIcon color="primary" /> :
+                            <CheckCircleIcon color="primary"/> :
                             (
                                 this.validDescription() === 1 || this.validDescription() === 2 ?
-                                    <WarningIcon color="secondary" /> :
-                                    <ErrorIcon color="error"  />
+                                    <WarningIcon color="secondary"/> :
+                                    <ErrorIcon color="error"/>
                             )
                     } {i18n.__("Description")}
                     {
                         this.validDescription() === 3 ?
-                            <Badge badgeContent="+1" color="primary" /> :
+                            <Badge badgeContent="+1" color="primary"/> :
                             (
                                 this.validDescription() === 1 || this.validDescription() === 2 ?
-                                    <Badge badgeContent="0" color="secondary" /> :
-                                    <Badge badgeContent="-1" color="error" />
+                                    <Badge badgeContent="0" color="secondary"/> :
+                                    <Badge badgeContent="-1" color="error"/>
                             )
                     }
                 </Typography>
-                <Divider variant="fullWidth" />
+                <Divider variant="fullWidth"/>
                 {
-                    this.props.description ? <Box className="content-tag"><Typography variant="body2" color="primary">{this.props.description}</Typography></Box> : ""
+                    this.props.description ? <Box className="content-tag"><Typography variant="body2"
+                                                                                      color="primary">{this.props.description}</Typography></Box> : ""
                 }
                 <Typography variant="subtitle1" className="description-tag" color="textSecondary">
                     {
@@ -53,8 +53,8 @@ export default class Description extends React.Component
                             this.validDescription() === 1 ?
                                 i18n.__("The meta description tag is too short, try to keep your meta description between 120 and 158 characters.") :
                                 (this.validDescription() === 2 ?
-                                    i18n.__("The meta description tag is too long, try to keep your meta description between 120 and 158 characters.") :
-                                    i18n.__("The meta description was not found, it serves the function of advertising copy and thus is a very visible and important part of search marketing.")
+                                        i18n.__("The meta description tag is too long, try to keep your meta description between 120 and 158 characters.") :
+                                        i18n.__("The meta description was not found, it serves the function of advertising copy and thus is a very visible and important part of search marketing.")
                                 )
                         )
                     }

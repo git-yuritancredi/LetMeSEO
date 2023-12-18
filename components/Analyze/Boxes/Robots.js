@@ -1,14 +1,13 @@
-import {Box, Divider, Typography} from "@mui/material";
 import React from "react";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import WarningIcon from "@mui/icons-material/Warning";
-import ErrorIcon from "@mui/icons-material/Error";
 import {i18n} from "../../language";
+import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
+import {Box, Divider, Typography} from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-export default class Robots extends React.Component
-{
-    robotsIcon(){
-        if(
+export default class Robots extends React.Component {
+    robotsIcon() {
+        if (
             (!this.props.robots) ||
             (this.props.robots.indexOf('index') !== -1 &&
                 this.props.robots.indexOf('follow') !== -1) ||
@@ -16,22 +15,22 @@ export default class Robots extends React.Component
                 this.props.robots.indexOf('nofollow') === -1) ||
             (this.props.robots.indexOf('all') !== -1) ||
             (this.props.robots.indexOf('none') === -1)
-        ){
-            return <CheckCircleIcon color="primary" />;
+        ) {
+            return <CheckCircleIcon color="primary"/>;
         }
-        if(
+        if (
             (this.props.robots.indexOf('noindex') !== -1 &&
                 this.props.robots.indexOf('follow') !== -1) ||
             (this.props.robots.indexOf('index') !== -1 &&
                 this.props.robots.indexOf('nofollow') !== -1)
-        ){
-            return <WarningIcon color="secondary" />;
+        ) {
+            return <WarningIcon color="secondary"/>;
         }
-        return <ErrorIcon color="error" />;
+        return <ErrorIcon color="error"/>;
     }
 
-    getRobotsText(){
-        if(
+    getRobotsText() {
+        if (
             (!this.props.robots) ||
             (this.props.robots.indexOf('index') !== -1 &&
                 this.props.robots.indexOf('follow') !== -1) ||
@@ -39,17 +38,17 @@ export default class Robots extends React.Component
                 this.props.robots.indexOf('nofollow') === -1) ||
             (this.props.robots.indexOf('all') !== -1) ||
             (this.props.robots.indexOf('none') === -1)
-        ){
+        ) {
             return i18n.__("The robots tag is a useful element if you want to prevent certain articles from being indexed. These can stop crawlers from sites such as Google from accessing the content.");
         }
-        if(this.props.robots.indexOf('noindex') !== -1 &&
+        if (this.props.robots.indexOf('noindex') !== -1 &&
             this.props.robots.indexOf('follow') !== -1
-        ){
+        ) {
             return i18n.__("If you set robots meta like this, crawlers such as Google not index this page.");
         }
-        if((this.props.robots.indexOf('index') !== -1 &&
+        if ((this.props.robots.indexOf('index') !== -1 &&
             this.props.robots.indexOf('nofollow') !== -1)
-        ){
+        ) {
             return i18n.__("If you set robots meta like this, crawlers such as Google not follow links in this page.");
         }
         return i18n.__("If you set robots meta like this, crawlers such as Google not index this page and not follow links in this page.");
