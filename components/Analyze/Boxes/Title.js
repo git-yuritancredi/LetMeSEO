@@ -1,17 +1,16 @@
-import {Badge, Box, Divider, Typography} from "@material-ui/core";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import WarningIcon from "@material-ui/icons/Warning";
-import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
 import {i18n} from "../../language";
+import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import {Badge, Box, Divider, Typography} from "@mui/material";
 
-export default class Title extends React.Component
-{
-    validTitle(){
-        if(!this.props.title){
+export default class Title extends React.Component {
+    validTitle() {
+        if (!this.props.title) {
             return 0;
         }
-        if(this.props.title.length > 60){
+        if (this.props.title.length > 60) {
             return 1;
         }
         return 2;
@@ -23,26 +22,27 @@ export default class Title extends React.Component
                 <Typography variant="h5" color="textPrimary" className="title-tag">
                     {
                         this.validTitle() === 2 ?
-                            <CheckCircleIcon color="primary" /> :
+                            <CheckCircleIcon color="primary"/> :
                             (
                                 this.validTitle() === 1 ?
-                                    <WarningIcon color="secondary" /> :
-                                    <ErrorIcon color="disabled" />
+                                    <WarningIcon color="secondary"/> :
+                                    <ErrorIcon color="disabled"/>
                             )
                     } {i18n.__("Title")}
                     {
                         this.validTitle() === 2 ?
-                            <Badge badgeContent="+1" color="primary" /> :
+                            <Badge badgeContent="+1" color="primary"/> :
                             (
                                 this.validTitle() === 1 ?
-                                    <Badge badgeContent="0" color="secondary" /> :
-                                    <Badge badgeContent="-1" color="error" />
+                                    <Badge badgeContent="0" color="secondary"/> :
+                                    <Badge badgeContent="-1" color="error"/>
                             )
                     }
                 </Typography>
-                <Divider variant="fullWidth" />
+                <Divider variant="fullWidth"/>
                 {
-                    this.props.title ? <Box className="content-tag"><Typography variant="body2" color="primary">{this.props.title}</Typography></Box> : ""
+                    this.props.title ? <Box className="content-tag"><Typography variant="body2"
+                                                                                color="primary">{this.props.title}</Typography></Box> : ""
                 }
                 <Typography variant="subtitle1" className="description-tag" color="textSecondary">
                     {

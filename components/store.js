@@ -1,8 +1,8 @@
-import {configureStore} from '@reduxjs/toolkit';
-import configSlice from './slices/configSlice';
-import navigationSlice from "./slices/navigationSlice";
 import appSlice from "./slices/appSlice";
+import configSlice from './slices/configSlice';
+import {configureStore} from '@reduxjs/toolkit';
 import historySlice from "./slices/historySlice";
+import navigationSlice from "./slices/navigationSlice";
 
 export const mapState = (state) => {
 	return {

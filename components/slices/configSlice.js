@@ -1,5 +1,5 @@
-import {createSlice} from '@reduxjs/toolkit';
 import electron from 'electron';
+import {createSlice} from '@reduxjs/toolkit';
 
 export const configSlice = createSlice({
 	name: 'config',
