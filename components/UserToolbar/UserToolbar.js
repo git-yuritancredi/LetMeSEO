@@ -1,21 +1,20 @@
 import React from 'react';
-import { AppBar, Toolbar, IconButton } from '@material-ui/core';
+import electron from 'electron';
 import CloseIcon from '@material-ui/icons/Close';
-import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import MinimizeIcon from '@material-ui/icons/Minimize';
-    import electron from 'electron';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import {AppBar, Toolbar, IconButton} from '@material-ui/core';
 
-export default class UserToolbar extends React.Component
-{
+export default class UserToolbar extends React.Component {
     closeHandler() {
         electron.ipcRenderer.send('quit-app');
     }
 
-    resizeHandler(){
+    resizeHandler() {
         electron.ipcRenderer.send('resize-app');
     }
 
-    minimizeHandle(){
+    minimizeHandle() {
         electron.ipcRenderer.send('minimize-app');
     }
 
@@ -24,13 +23,13 @@ export default class UserToolbar extends React.Component
             <AppBar elevation={0} className="toolbar" color="transparent" position="static">
                 <Toolbar>
                     <IconButton onClick={this.closeHandler} edge="start" color="default" aria-label="menu">
-                        <CloseIcon fontSize="small" />
+                        <CloseIcon fontSize="small"/>
                     </IconButton>
                     <IconButton onClick={this.resizeHandler} edge="start" color="default" aria-label="menu">
-                        <FullscreenIcon fontSize="small" />
+                        <FullscreenIcon fontSize="small"/>
                     </IconButton>
                     <IconButton onClick={this.minimizeHandle} edge="start" color="default" aria-label="menu">
-                        <MinimizeIcon fontSize="small" />
+                        <MinimizeIcon fontSize="small"/>
                     </IconButton>
                 </Toolbar>
             </AppBar>
